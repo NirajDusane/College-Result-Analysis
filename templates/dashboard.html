@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result Dashboard</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; padding: 0; background-color: #f0f2f5; margin: 0; }
+        
+        /* === NEW NAVBAR === */
+        .navbar { background-color: #343a40; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .nav-brand { font-size: 20px; font-weight: bold; text-transform: uppercase; }
+        .nav-links a { color: white; text-decoration: none; margin-left: 20px; font-size: 15px; padding: 8px 12px; border-radius: 4px; transition: 0.3s; }
+        .nav-links a:hover { background-color: #495057; }
+        .nav-active { background-color: #007bff; }
+
+        /* Main Content Container */
+        .main-content { padding: 20px 30px; }
+
+        /* Header Info */
+        .info-card { background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid #007bff; }
+        .info-card h2 { margin: 0; font-size: 24px; color: #333; }
+        .info-card p { margin: 5px 0 0; color: #666; }
+
+        /* Stats Section Titles */
+        .stats-section-title { margin: 20px 0 10px 0; font-weight: bold; color: #555; display: block; border-bottom: 1px solid #ddd; padding-bottom: 5px; font-size: 14px; text-transform: uppercase; }
+
+        /* Stats Cards */
+        .stats-container { display: flex; gap: 15px; margin-bottom: 10px; flex-wrap: wrap; }
+        .stat-card { flex: 1; min-width: 140px; padding: 15px; border-radius: 8px; color: white; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.2s; }
+        .stat-card:hover { transform: scale(1.05); opacity: 0.9; }
+        .stat-card h3 { margin: 0; font-size: 28px; }
+        .stat-card span { font-size: 11px; text-transform: uppercase; font-weight: bold; }
+        
+        .bg-total { background-color: #6c757d; }
+        .bg-pass { background-color: #28a745; }
+        .bg-fail { background-color: #dc3545; }
+        .bg-atkt { background-color: #fd7e14; }
+
+        /* Gender Borders */
+        .bg-male-card { border-bottom: 5px solid #007bff; }
+        .bg-female-card { border-bottom: 5px solid #e83e8c; }
+
+        /* Search & Filter Controls */
+        .controls { background: white; padding: 15px; border-radius: 8px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .filter-group { display: flex; gap: 10px; align-items: center; }
+        input[type="text"], select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 250px; }
+
+        /* Table */
+        .table-container { overflow-x: auto; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #343a40; color: white; font-weight: 600; cursor: pointer; user-select: none; }
+        th:hover { background-color: #495057; }
+        tr:hover { background-color: #f8f9fa; }
+
+        .res-pass { color: #28a745; font-weight: bold; }
+        .res-fail { color: #dc3545; font-weight: bold; }
+        .res-atkt { color: #fd7e14; font-weight: bold; }
+
+        .btn-view { padding: 6px 12px; background-color: #17a2b8; color: white; text-decoration: none; border-radius: 4px; font-size: 13px; }
+        .btn-reset { padding: 8px 15px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 4px; font-size: 14px; cursor: pointer; border:none; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-brand">College Result System</div>
+            <div class="nav-links">
+                <a href="/">Upload New PDF</a>
+                <a href="{{ url_for('student_analysis') }}">Student Analysis (Excel)</a>
+                <a href="{{ url_for('subject_analysis') }}" >Subject Analysis</a>
+            </div>
+    </nav>
+
+    <div class="main-content">
+        
+        <div class="info-card">
+            <h2>{{ course }}</h2>
+            <p>Class: <strong>{{ year }}</strong> | Total: <strong>{{ stats.total }} Students</strong></p>
+        </div>
+
+        <!-- === GENDER WISE STATISTICS ADDED === -->
+        
+        <div class="stats-section-title">♂ Male Students Statistics</div>
+        <div class="stats-container">
+            <div class="stat-card bg-pass bg-male-card" onclick="applyGenderStatusFilter('Male', 'pass')">
+                <h3>{{ stats.male_pass }}</h3><span>Male Pass</span>
+            </div>
+            <div class="stat-card bg-atkt bg-male-card" onclick="applyGenderStatusFilter('Male', 'atkt')">
+                <h3>{{ stats.male_atkt }}</h3><span>Male ATKT</span>
+            </div>
+            <div class="stat-card bg-fail bg-male-card" onclick="applyGenderStatusFilter('Male', 'fail')">
+                <h3>{{ stats.male_fail }}</h3><span>Male Fail</span>
+            </div>
+        </div>
+
+        <div class="stats-section-title">♀ Female Students Statistics</div>
+        <div class="stats-container">
+            <div class="stat-card bg-pass bg-female-card" onclick="applyGenderStatusFilter('Female', 'pass')">
+                <h3>{{ stats.female_pass }}</h3><span>Female Pass</span>
+            </div>
+            <div class="stat-card bg-atkt bg-female-card" onclick="applyGenderStatusFilter('Female', 'atkt')">
+                <h3>{{ stats.female_atkt }}</h3><span>Female ATKT</span>
+            </div>
+            <div class="stat-card bg-fail bg-female-card" onclick="applyGenderStatusFilter('Female', 'fail')">
+                <h3>{{ stats.female_fail }}</h3><span>Female Fail</span>
+            </div>
+        </div>
+
+        <div class="stats-section-title">General Overview</div>
+        <div class="stats-container" style="margin-bottom: 25px;">
+            <div class="stat-card bg-total" onclick="filterByCard('all')">
+                <h3>{{ stats.total }}</h3><span>Total Students</span>
+            </div>
+            <div class="stat-card bg-pass" onclick="filterByCard('pass')">
+                <h3>{{ stats.pass }}</h3><span>Overall Pass</span>
+            </div>
+            <div class="stat-card bg-atkt" onclick="filterByCard('atkt')">
+                <h3>{{ stats.atkt }}</h3><span>Overall ATKT</span>
+            </div>
+            <div class="stat-card bg-fail" onclick="filterByCard('fail')">
+                <h3>{{ stats.fail }}</h3><span>Overall Fail</span>
+            </div>
+        </div>
+
+        <!-- Search & Reset Controls -->
+        <div class="controls">
+            <div class="filter-group">
+                <input type="text" id="searchInput" onkeyup="globalFilter()" placeholder="Search Name, Seat No or PRN...">
+                
+                <select id="statusFilter" onchange="globalFilter()">
+                    <option value="all">All Results</option>
+                    <option value="pass">Pass Only</option>
+                    <option value="fail">Fail Only</option>
+                    <option value="atkt">ATKT Only</option>
+                </select>
+            </div>
+
+            <div>
+                <button onclick="resetAllFilters()" class="btn-reset">Reset / Show All</button>
+            </div>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div style="padding: 10px; background: #fff3cd; border: 1px solid #ffeeba; border-radius: 5px; margin-bottom: 15px; color: #856404;">
+                {{ messages[0] }}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <!-- Table -->
+        <div class="table-container">
+            <table id="studentTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Seat No &#x21C5;</th>
+                        <th onclick="sortTable(1)">Student Name &#x21C5;</th>
+                        <th>PRN</th>
+                        <th>Gender</th>
+                        <th onclick="sortTable(4)">Result &#x21C5;</th>
+                        <th onclick="sortTable(5)">CGPA &#x21C5;</th>
+                        <th style="text-align: center;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for std in student_data %}
+                    <tr data-gender="{{ std.gender }}" data-status="{{ 'pass' if 'PASS' in std.result.upper() else ('atkt' if 'A.T.K.T' in std.result.upper() else 'fail') }}">
+                        <td>{{ std.seat_no }}</td>
+                        <td style="font-weight: 500;">{{ std.full_name }}</td>
+                        <td>{{ std.prn }}</td>
+                        <td>{{ std.gender }}</td>
+                        <td>
+                            {% if 'PASS' in std.result.upper() %}
+                                <span class="res-pass">{{ std.result }}</span>
+                            {% elif 'A.T.K.T' in std.result.upper() %}
+                                <span class="res-atkt">{{ std.result }}</span>
+                            {% else %}
+                                <span class="res-fail">{{ std.result }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ std.cgpa }}</td>
+                        <td style="text-align: center;">
+                            <a href="/report/{{ std.seat_no }}" class="btn-view" target="_blank">View Report</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- JavaScript Filters Updated -->
+    <script>
+        let currentGenderFilter = 'all';
+
+        function globalFilter() {
+            var input = document.getElementById("searchInput").value.toUpperCase();
+            var statusFilter = document.getElementById("statusFilter").value;
+            var table = document.getElementById("studentTable");
+            var tr = table.getElementsByTagName("tr");
+
+            for (var i = 1; i < tr.length; i++) {
+                var tds = tr[i].getElementsByTagName("td");
+                if (tds.length > 0) {
+                    var seatNo = tds[0].innerText;
+                    var name = tds[1].innerText;
+                    var rowStatus = tr[i].getAttribute("data-status");
+                    var rowGender = tr[i].getAttribute("data-gender");
+
+                    var textMatch = seatNo.toUpperCase().includes(input) || name.toUpperCase().includes(input);
+                    var statusMatch = (statusFilter === "all" || rowStatus === statusFilter);
+                    var genderMatch = (currentGenderFilter === 'all' || rowGender === currentGenderFilter);
+
+                    tr[i].style.display = (textMatch && statusMatch && genderMatch) ? "" : "none";
+                }
+            }
+        }
+
+        // New function for Gender + Status Card clicks
+        function applyGenderStatusFilter(gender, status) {
+            currentGenderFilter = gender;
+            document.getElementById("statusFilter").value = status;
+            globalFilter();
+        }
+
+        function filterByCard(status) {
+            currentGenderFilter = 'all';
+            document.getElementById("statusFilter").value = status;
+            globalFilter();
+        }
+
+        function resetAllFilters() {
+            currentGenderFilter = 'all';
+            document.getElementById("searchInput").value = "";
+            document.getElementById("statusFilter").value = "all";
+            globalFilter();
+        }
+
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("studentTable");
+            switching = true;
+            dir = "asc"; 
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    var xVal = x.innerHTML.toLowerCase(), yVal = y.innerHTML.toLowerCase();
+                    var isNum = !isNaN(parseFloat(xVal)) && isFinite(xVal);
+                    
+                    if (dir == "asc") {
+                        if (isNum ? parseFloat(xVal) > parseFloat(yVal) : xVal > yVal) { shouldSwitch = true; break; }
+                    } else {
+                        if (isNum ? parseFloat(xVal) < parseFloat(yVal) : xVal < yVal) { shouldSwitch = true; break; }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount++; 
+                } else {
+                    if (switchcount == 0 && dir == "asc") { dir = "desc"; switching = true; }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

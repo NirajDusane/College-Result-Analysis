@@ -1,38 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Analysis</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 400px; text-align: center; }
-        h2 { color: #333; margin-bottom: 20px; }
-        p { color: #666; font-size: 14px; margin-bottom: 25px; }
-        
-        input[type="file"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 20px; }
-        
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; margin-bottom: 10px; }
-        .btn-upload { background-color: #007bff; color: white; font-weight: bold; }
-        .btn-upload:hover { background-color: #0056b3; }
-        
-        .btn-back { background-color: #6c757d; color: white; text-decoration: none; display: inline-block; box-sizing: border-box; }
-        .btn-back:hover { background-color: #5a6268; }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background-color: #f0f2f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      .container {
+        background: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        width: 400px;
+        text-align: center;
+      }
+      h2 {
+        color: #333;
+        margin-bottom: 20px;
+      }
+      p {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 25px;
+      }
+
+      input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+
+      .btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-bottom: 10px;
+      }
+      .btn-upload {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+      }
+      .btn-upload:hover {
+        background-color: #0056b3;
+      }
+
+      .btn-back {
+        background-color: #6c757d;
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+        box-sizing: border-box;
+      }
+      .btn-back:hover {
+        background-color: #5a6268;
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <div class="container">
-        <h2>Student Analysis</h2>
-        <p>Upload an Excel file containing specific <b>Seat Numbers</b> to filter the result data.</p>
+      <h2>Student Analysis</h2>
+      <p>
+        Upload an Excel file containing specific <b>Seat Numbers</b> to filter
+        the result data.
+      </p>
 
-        <form action="{{ url_for('filter_excel') }}" method="post" enctype="multipart/form-data">
-            <input type="file" name="student_excel" accept=".xlsx, .xls" required>
-            <button type="submit" class="btn btn-upload">Apply Filter & View Result</button>
-        </form>
+      <form
+        action="{{ url_for('filter_excel') }}"
+        method="post"
+        enctype="multipart/form-data"
+      >
+        <input type="file" name="student_excel" accept=".xlsx, .xls" required />
+        <button type="submit" class="btn btn-upload">
+          Apply Filter & View Result
+        </button>
+      </form>
 
-        <a href="{{ url_for('dashboard') }}" class="btn btn-back">Back to Dashboard</a>
+      <a href="{{ url_for('dashboard') }}" class="btn btn-back"
+        >Back to Dashboard</a
+      >
     </div>
-
-</body>
+  </body>
 </html>

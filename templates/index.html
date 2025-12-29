@@ -1,48 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>College Result Analysis</title>
     <style>
-        /* जुने CSS तसेच ठेवा */
-        body { font-family: sans-serif; background: #e9ecef; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .container { background: white; padding: 40px; border-radius: 10px; width: 400px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        select, input, button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; }
-        button { background: #007bff; color: white; font-weight: bold; cursor: pointer; border: none; }
-        button:hover { background: #0056b3; }
+      body {
+        font-family: sans-serif;
+        background: #e9ecef;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .container {
+        background: white;
+        padding: 40px;
+        border-radius: 10px;
+        width: 400px;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      select,
+      input,
+      button {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+      button {
+        background: #007bff;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        border: none;
+      }
+      button:hover {
+        background: #0056b3;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h2>Upload Result Gazette</h2>
-        
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            <div style="color: red; margin-bottom: 10px;">{{ messages[0] }}</div>
-          {% endif %}
-        {% endwith %}
+      <h2>Upload Result Gazette</h2>
 
-        <form action="{{ url_for('analyze') }}" method="post" enctype="multipart/form-data">
-            
-            <label>Select Course:</label>
-            <select name="course_name" required>
-                <option value="bcs">B.Sc. (Computer Science)</option>
-                <option value="bca">B.C.A.</option>
-                <option value="other">Other</option>
-            </select>
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <div style="color: red; margin-bottom: 10px">{{ messages[0] }}</div>
+      {% endif %} {% endwith %}
 
-            <label>Select Year:</label>
-            <select name="class_year" required>
-                <option value="fy">First Year</option>
-                <option value="sy">Second Year</option>
-                <option value="ty">Third Year</option>
-            </select>
-            
-            <label>Upload PDF:</label>
-            <input type="file" name="ledger_pdf" accept=".pdf" required>
-            
-            <button type="submit">Analyze PDF</button>
-        </form>
+      <form
+        action="{{ url_for('analyze') }}"
+        method="post"
+        enctype="multipart/form-data"
+      >
+        <label>Select Course:</label>
+        <select name="course_name" required>
+          <option value="bcs">B.Sc. (Computer Science)</option>
+          <option value="bca">B.C.A.</option>
+          <option value="other">BBA</option>
+          <option value="other">Msc (Computer Science)</option>
+        </select>
+
+        <label>Select Year:</label>
+        <select name="class_year" required>
+          <option value="fy">First Year (2024 Pattern)</option>
+          <option value="sy">Second Year</option>
+          <option value="ty">Third Year (2019 Pattern)</option>
+        </select>
+
+        <label>Upload PDF:</label>
+        <input type="file" name="ledger_pdf" accept=".pdf" required />
+
+        <button type="submit">Analyze PDF</button>
+      </form>
     </div>
-</body>
+  </body>
 </html>

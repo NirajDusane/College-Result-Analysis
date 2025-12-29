@@ -6,59 +6,36 @@
     <title>Subject Wise Analysis</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #f4f6f9; padding: 0; margin: 0; }
-        
-        /* Navbar */
         .navbar { background-color: #343a40; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; }
-        .nav-links a { color: white; text-decoration: none; margin-left: 20px; font-size: 15px; }
-        .btn-back { background: #6c757d; padding: 5px 10px; border-radius: 4px; }
-
+        .nav-links a { color: white; text-decoration: none; margin-left: 20px; font-size: 14px; }
+        .btn-back { background: #6c757d; padding: 5px 10px; border-radius: 4px; color: white; text-decoration: none; }
         .container { padding: 30px; }
-
-        /* Modified Selection Box (Side by Side) */
-        .select-box { 
-            background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-            display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end; margin-bottom: 20px; 
-        }
-        
+        .select-box { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end; margin-bottom: 20px; }
         .form-group { display: flex; flex-direction: column; gap: 5px; }
-        label { font-weight: bold; color: #333; font-size: 14px; }
+        select, input[type="file"] { padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        .btn-analyze { background-color: #007bff; color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: bold; }
         
-        select, input[type="file"] { 
-            padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; 
-        }
-        select { width: 250px; }
-        
-        .btn-analyze { 
-            background-color: #007bff; color: white; border: none; padding: 12px 25px; 
-            border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; 
-            height: 45px;
-        }
-        .btn-analyze:hover { background-color: #0056b3; }
-
-        /* Stats Cards */
         .stats-grid { display: flex; gap: 20px; margin-bottom: 30px; flex-wrap: wrap; }
-        .card { flex: 1; background: white; padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-top: 4px solid #007bff; }
+        .card { flex: 1; min-width: 200px; background: white; padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-top: 4px solid #6c757d; }
         .card h3 { margin: 0; font-size: 32px; color: #333; }
         .card p { margin: 5px 0 0; color: #666; font-weight: bold; }
 
-        /* Top 3 Section */
         .top-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
         .top-grid { display: flex; gap: 20px; justify-content: space-around; margin-top: 15px; }
         .topper { background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; text-align: center; width: 30%; }
         .rank { font-size: 24px; font-weight: bold; color: #ffd700; }
 
-        /* Table */
-        table { width: 100%; background: white; border-collapse: collapse; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        table { width: 100%; background: white; border-collapse: collapse; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-top: 10px; border-radius: 8px; overflow: hidden; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #343a40; color: white; }
-        .pass { color: green; font-weight: bold; }
-        .fail { color: red; font-weight: bold; }
+        th { background-color: #343a40; color: white; font-size: 14px; }
+        tr:hover { background-color: #f8f9fa; }
+        .pass { color: green; font-weight: bold; } .fail { color: red; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
-        <div style="font-size: 20px; font-weight: bold;">Subject Analysis</div>
+        <div style="font-size: 20px; font-weight: bold;">Subject Analysis ({{ 'NEP' if is_nep else '2019 Pattern' }})</div>
         <div class="nav-links">
             <a href="{{ url_for('dashboard') }}" class="btn-back">Back to Dashboard</a>
         </div>
@@ -66,18 +43,7 @@
 
     <div class="container">
         
-        <!-- Flash Messages -->
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            <div style="background: #e2e6ea; color: #333; padding: 10px; border-radius: 5px; margin-bottom: 20px; border-left: 5px solid #28a745;">
-                {{ messages[0] }}
-            </div>
-          {% endif %}
-        {% endwith %}
-
-        <!-- Selection Form (Multipart for File Upload) -->
         <form method="POST" enctype="multipart/form-data" class="select-box">
-            
             <div class="form-group">
                 <label>1. Select Subject Code:</label>
                 <select name="subject_code" required>
@@ -87,54 +53,34 @@
                     {% endfor %}
                 </select>
             </div>
-
             <div class="form-group">
-                <label>2. Filter by Student List (Optional Excel):</label>
+                <label>2. Filter by Excel (Optional):</label>
                 <input type="file" name="student_excel" accept=".xlsx, .xls">
             </div>
-
             <button type="submit" class="btn-analyze">Analyze Result</button>
         </form>
 
         {% if selected_subject %}
             
-            <h2 style="margin-bottom: 20px;">
-                Analysis for Subject: <span style="color: #007bff;">{{ selected_subject }}</span>
-            </h2>
+            <h2 style="margin-bottom: 20px;">Analysis for Subject: <span style="color: #007bff;">{{ selected_subject }}</span></h2>
 
-            <!-- 1. मुख्य आकडेवारी (Basic Stats) -->
             <div class="stats-grid">
-                <div class="card" style="border-top-color: #6c757d;"><h3>{{ stats.total }}</h3><p>Total Appeared</p></div>
-                <div class="card" style="border-top-color: #28a745;"><h3>{{ stats.pass }}</h3><p>Total Passed</p></div>
-                <div class="card" style="border-top-color: #dc3545;"><h3>{{ stats.fail }}</h3><p>Total Failed</p></div>
+                <div class="card" style="border-top-color: #17a2b8;"><h3>{{ stats.total }}</h3><p>Total Appeared</p></div>
+                <div class="card" style="border-top-color: #28a745;"><h3>{{ stats.pass }}</h3><p>Passed</p></div>
+                <div class="card" style="border-top-color: #dc3545;"><h3>{{ stats.fail }}</h3><p>Failed</p></div>
             </div>
 
-            <!-- 2. जेंडरनुसार सविस्तर आकडेवारी (Detailed Breakdown) -->
-            <h3 style="color: #444; margin-top: 30px;">Gender-wise Breakdown</h3>
-            <div class="stats-grid">
-                <!-- Male Stats -->
-                <div class="card" style="border-top-color: #007bff; background-color: #e7f3ff;">
-                    <h4 style="margin: 0; color: #0056b3;">MALE</h4>
-                    <hr>
-                    <p>Passed: <b style="color: green;">{{ stats.male_pass }}</b></p>
-                    <p>Failed: <b style="color: red;">{{ stats.male_fail }}</b></p>
-                    <small>Total: {{ stats.male }}</small>
+            {% if not is_nep %}
+                <h3 style="color: #444;">Gender Breakdown</h3>
+                <div class="stats-grid">
+                    <div class="card" style="background:#e7f3ff;"><h4>MALE</h4><p>Pass: {{ stats.male_pass }} | Fail: {{ stats.male_fail }}</p></div>
+                    <div class="card" style="background:#fff0f6;"><h4>FEMALE</h4><p>Pass: {{ stats.female_pass }} | Fail: {{ stats.female_fail }}</p></div>
                 </div>
+            {% endif %}
 
-                <!-- Female Stats -->
-                <div class="card" style="border-top-color: #e83e8c; background-color: #fff0f6;">
-                    <h4 style="margin: 0; color: #b01e5a;">FEMALE</h4>
-                    <hr>
-                    <p>Passed: <b style="color: green;">{{ stats.female_pass }}</b></p>
-                    <p>Failed: <b style="color: red;">{{ stats.female_fail }}</b></p>
-                    <small>Total: {{ stats.female }}</small>
-                </div>
-            </div>
-
-            <!-- Top 3 Toppers -->
             {% if top_3 %}
             <div class="top-section">
-                <h3 style="margin: 0; text-align: center;">🏆 Top Performers</h3>
+                <h3 style="margin: 0; text-align: center;">🏆 Top 3 Performers</h3>
                 <div class="top-grid">
                     {% for student in top_3 %}
                     <div class="topper">
@@ -147,13 +93,13 @@
             </div>
             {% endif %}
 
-            <!-- Student List Table -->
+            <h3>Detailed Student List</h3>
             <table>
                 <thead>
                     <tr>
                         <th>Seat No</th>
                         <th>Name</th>
-                        <th>Gender</th>
+                        {% if not is_nep %} <th>Gender</th> {% endif %}
                         <th>Internal</th>
                         <th>External</th>
                         <th>Total</th>
@@ -165,12 +111,12 @@
                     {% for std in subject_data %}
                     <tr>
                         <td>{{ std.seat_no }}</td>
-                        <td>{{ std.name }}</td>
-                        <td>{{ std.gender }}</td>
+                        <td>{{ std.full_name if std.full_name else std.name }}</td>
+                        {% if not is_nep %} <td>{{ std.gender }}</td> {% endif %}
                         <td>{{ std.internal }}</td>
                         <td>{{ std.external }}</td>
                         <td>{{ std.total }}</td>
-                        <td style="font-weight: bold;">{{ std.grade }}</td>
+                        <td><b>{{ std.grade }}</b></td>
                         <td class="{{ 'pass' if std.status == 'PASS' else 'fail' }}">{{ std.status }}</td>
                     </tr>
                     {% endfor %}

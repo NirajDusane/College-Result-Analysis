@@ -1,55 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subject Wise Analysis</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f6f9; padding: 0; margin: 0; }
-        .navbar { background-color: #343a40; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; }
-        .nav-links a { color: white; text-decoration: none; margin-left: 20px; font-size: 14px; }
-        .btn-back { background: #6c757d; padding: 5px 10px; border-radius: 4px; color: white; text-decoration: none; }
-        .container { padding: 30px; }
-        .select-box { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end; margin-bottom: 20px; }
-        .form-group { display: flex; flex-direction: column; gap: 5px; }
-        select, input[type="file"] { padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
-        .btn-analyze { background-color: #007bff; color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        
-        .stats-grid { display: flex; gap: 20px; margin-bottom: 30px; flex-wrap: wrap; }
-        .card { flex: 1; min-width: 200px; background: white; padding: 20px; border-radius: 8px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-top: 4px solid #6c757d; }
-        .card h3 { margin: 0; font-size: 32px; color: #333; }
-        .card p { margin: 5px 0 0; color: #666; font-weight: bold; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f9;
+            padding: 0;
+            margin: 0;
+        }
 
-        .top-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
-        .top-grid { display: flex; gap: 20px; justify-content: space-around; margin-top: 15px; }
-        .topper { background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; text-align: center; width: 30%; }
-        .rank { font-size: 24px; font-weight: bold; color: #ffd700; }
+        .navbar {
+            background-color: #343a40;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
 
-        table { width: 100%; background: white; border-collapse: collapse; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-top: 10px; border-radius: 8px; overflow: hidden; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #343a40; color: white; font-size: 14px; }
-        tr:hover { background-color: #f8f9fa; }
-        .pass { color: green; font-weight: bold; } .fail { color: red; font-weight: bold; }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 14px;
+        }
+
+        .btn-back {
+            background: #6c757d;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .container {
+            padding: 30px;
+        }
+
+        .select-box {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        select,
+        input[type="file"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .btn-analyze {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .stats-grid {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            flex: 1;
+            min-width: 180px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #6c757d;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            opacity: 0.9;
+        }
+
+        .card h3 {
+            margin: 0;
+            font-size: 32px;
+            color: #333;
+        }
+
+        .card p {
+            margin: 5px 0 0;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .top-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .top-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: space-around;
+            margin-top: 15px;
+        }
+
+        .topper {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            width: 30%;
+        }
+
+        .rank {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        table {
+            width: 100%;
+            background: white;
+            border-collapse: collapse;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-top: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #343a40;
+            color: white;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .pass {
+            color: green;
+            font-weight: bold;
+        }
+
+        .fail {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
+
 <body>
 
     <nav class="navbar">
-        <div style="font-size: 20px; font-weight: bold;">Subject Analysis ({{ 'NEP' if is_nep else '2019 Pattern' }})</div>
+        <div style="font-size: 20px; font-weight: bold;">Subject Analysis ({{ 'NEP' if is_nep else '2019 Pattern' }})
+        </div>
         <div class="nav-links">
             <a href="{{ url_for('dashboard') }}" class="btn-back">Back to Dashboard</a>
         </div>
     </nav>
 
     <div class="container">
-        
         <form method="POST" enctype="multipart/form-data" class="select-box">
             <div class="form-group">
                 <label>1. Select Subject Code:</label>
                 <select name="subject_code" required>
                     <option value="" disabled selected>-- Choose Subject --</option>
                     {% for code in unique_subjects %}
-                        <option value="{{ code }}" {{ 'selected' if code == selected_subject }}>{{ code }}</option>
+                    <option value="{{ code }}" {{ 'selected' if code==selected_subject }}>{{ code }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -61,70 +210,134 @@
         </form>
 
         {% if selected_subject %}
-            
-            <h2 style="margin-bottom: 20px;">Analysis for Subject: <span style="color: #007bff;">{{ selected_subject }}</span></h2>
+        <h2 style="margin-bottom: 20px;">Analysis for Subject: <span style="color: #007bff;">{{ selected_subject
+                }}</span></h2>
 
-            <div class="stats-grid">
-                <div class="card" style="border-top-color: #17a2b8;"><h3>{{ stats.total }}</h3><p>Total Appeared</p></div>
-                <div class="card" style="border-top-color: #28a745;"><h3>{{ stats.pass }}</h3><p>Passed</p></div>
-                <div class="card" style="border-top-color: #dc3545;"><h3>{{ stats.fail }}</h3><p>Failed</p></div>
+        <!-- मुख्य आकडेवारी -->
+        <div class="stats-grid">
+            <div class="card" onclick="filterByGradeClass('all')" style="border-top-color: #17a2b8;">
+                <h3>{{ stats.total }}</h3>
+                <p>Total Appeared</p>
+            </div>
+            <div class="card" onclick="filterByGradeClass('all')" style="border-top-color: #28a745;">
+                <h3>{{ stats.pass }}</h3>
+                <p>Passed</p>
+            </div>
+            <div class="card" onclick="filterByGradeClass('fail')" style="border-top-color: #dc3545;">
+                <h3>{{ stats.fail }}</h3>
+                <p>Failed</p>
+            </div>
+        </div>
+
+        <!-- Grade Description Analysis -->
+        <h3 style="color: #444; margin-top: 30px; border-bottom: 2px solid #ccc; padding-bottom: 5px;">
+            Grade Description Analysis (Click card to filter table)
+        </h3>
+
+        <div class="stats-grid">
+            <div class="card" onclick="filterByGradeClass('distinction')"
+                style="border-top-color: #ffd700; background-color: #fffdf0;">
+                <h4 style="margin: 0; color: #b8860b;">DISTINCTION</h4>
+                <h3 style="color: #b8860b;">{{ stats.distinction }}</h3>
+                <small>(Grade O / A+)</small>
             </div>
 
-            {% if not is_nep %}
-                <h3 style="color: #444;">Gender Breakdown</h3>
-                <div class="stats-grid">
-                    <div class="card" style="background:#e7f3ff;"><h4>MALE</h4><p>Pass: {{ stats.male_pass }} | Fail: {{ stats.male_fail }}</p></div>
-                    <div class="card" style="background:#fff0f6;"><h4>FEMALE</h4><p>Pass: {{ stats.female_pass }} | Fail: {{ stats.female_fail }}</p></div>
-                </div>
-            {% endif %}
-
-            {% if top_3 %}
-            <div class="top-section">
-                <h3 style="margin: 0; text-align: center;">🏆 Top 3 Performers</h3>
-                <div class="top-grid">
-                    {% for student in top_3 %}
-                    <div class="topper">
-                        <div class="rank">#{{ loop.index }}</div>
-                        <div style="font-size: 18px; font-weight: bold;">{{ student.name }}</div>
-                        <div>Score: {{ student.total }} | Grade: {{ student.grade }}</div>
-                    </div>
-                    {% endfor %}
-                </div>
+            <div class="card" onclick="filterByGradeClass('first_class')"
+                style="border-top-color: #28a745; background-color: #f0fff4;">
+                <h4 style="margin: 0; color: #1e7e34;">FIRST CLASS</h4>
+                <h3 style="color: #1e7e34;">{{ stats.first_class }}</h3>
+                <small>(Grade A)</small>
             </div>
-            {% endif %}
 
-            <h3>Detailed Student List</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Seat No</th>
-                        <th>Name</th>
-                        {% if not is_nep %} <th>Gender</th> {% endif %}
-                        <th>Internal</th>
-                        <th>External</th>
-                        <th>Total</th>
-                        <th>Grade</th>
-                        <th>Result</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for std in subject_data %}
-                    <tr>
-                        <td>{{ std.seat_no }}</td>
-                        <td>{{ std.full_name if std.full_name else std.name }}</td>
-                        {% if not is_nep %} <td>{{ std.gender }}</td> {% endif %}
-                        <td>{{ std.internal }}</td>
-                        <td>{{ std.external }}</td>
-                        <td>{{ std.total }}</td>
-                        <td><b>{{ std.grade }}</b></td>
-                        <td class="{{ 'pass' if std.status == 'PASS' else 'fail' }}">{{ std.status }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="card" onclick="filterByGradeClass('higher_second')"
+                style="border-top-color: #17a2b8; background-color: #f0faff;">
+                <h4 style="margin: 0; color: #117a8b;">HIGHER SECOND</h4>
+                <h3 style="color: #117a8b;">{{ stats.higher_second }}</h3>
+                <small>(Grade B+)</small>
+            </div>
 
+            <div class="card" onclick="filterByGradeClass('second_class')"
+                style="border-top-color: #fd7e14; background-color: #fff5eb;">
+                <h4 style="margin: 0; color: #d9480f;">SECOND CLASS</h4>
+                <h3 style="color: #d9480f;">{{ stats.second_class }}</h3>
+                <small>(Grade B)</small>
+            </div>
+
+            <div class="card" onclick="filterByGradeClass('pass_class')"
+                style="border-top-color: #6c757d; background-color: #f8f9fa;">
+                <h4 style="margin: 0; color: #495057;">PASS CLASS</h4>
+                <h3 style="color: #495057;">{{ stats.pass_class }}</h3>
+                <small>(Grade C / D / P)</small>
+            </div>
+
+            <div class="card" onclick="filterByGradeClass('fail')"
+                style="border-top-color: #dc3545; background-color: #fff5f5;">
+                <h4 style="margin: 0; color: #a94442;">FAIL / BELOW MIN</h4>
+                <h3 style="color: #dc3545;">{{ stats.fail }}</h3>
+                <small>(Grade F / AB / ---)</small>
+            </div>
+        </div>
+
+        {% if top_3 %}
+        <div class="top-section">
+            <h3 style="margin: 0; text-align: center;">🏆 Top 3 Performers</h3>
+            <div class="top-grid">
+                {% for student in top_3 %}
+                <div class="topper">
+                    <div class="rank">#{{ loop.index }}</div>
+                    <div style="font-size: 18px; font-weight: bold;">{{ student.name }}</div>
+                    <div>Score: {{ student.total }} | Grade: {{ student.grade }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <h3>Detailed Student List</h3>
+        <table id="studentTable">
+            <thead>
+                <tr>
+                    <th>Seat No</th>
+                    <th>Name</th>
+                    {% if not is_nep %} <th>Gender</th> {% endif %}
+                    <th>Internal</th>
+                    <th>External</th>
+                    <th>Total</th>
+                    <th>Grade</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody id="studentTableBody">
+                {% for std in subject_data %}
+                <tr data-grade-class="{{ std.grade_class }}">
+                    <td>{{ std.seat_no }}</td>
+                    <td>{{ std.name }}</td>
+                    {% if not is_nep %} <td>{{ std.gender }}</td> {% endif %}
+                    <td>{{ std.internal }}</td>
+                    <td>{{ std.external }}</td>
+                    <td>{{ std.total }}</td>
+                    <td><b>{{ std.grade }}</b></td>
+                    <td class="{{ 'pass' if std.status == 'PASS' else 'fail' }}">{{ std.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
         {% endif %}
     </div>
 
+    <script>
+        function filterByGradeClass(gradeClass) {
+            const tr = document.querySelectorAll("#studentTableBody tr");
+            tr.forEach(row => {
+                const rowClass = row.getAttribute("data-grade-class");
+                if (gradeClass === 'all' || rowClass === gradeClass) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+    </script>
 </body>
+
 </html>

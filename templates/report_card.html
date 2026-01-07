@@ -2,56 +2,67 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-
-    <!-- Document title shown in browser tab -->
-    <title>Official Statement of Marks</title>
-
+    <title>
+      Official Statement of Marks - Savitribai Phule Pune University
+    </title>
     <style>
-      /* ===== Global Page Styling ===== */
       body {
         font-family: "Times New Roman", Times, serif;
         background-color: #525659;
         display: flex;
         justify-content: center;
         padding: 20px;
+        margin: 0;
       }
-
-      /* ===== Main Report Card Container ===== */
       .report-card {
         background: white;
-        width: 297mm; /* A4 landscape width */
+        width: 297mm;
         min-height: 210mm;
         padding: 30px;
         box-sizing: border-box;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+        position: relative;
       }
 
-      /* ===== University Header Section ===== */
       .header {
         text-align: center;
         border-bottom: 2px solid #000;
         padding-bottom: 10px;
+        margin-bottom: 15px;
+      }
+      .header h2 {
+        margin: 0;
+        text-transform: uppercase;
+        font-size: 24px;
+      }
+      .header p {
+        margin: 5px 0;
+        font-weight: bold;
+        color: #333;
       }
 
-      /* ===== Student Information Table ===== */
       .info-table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 10px;
-        font-size: 14px;
+        font-size: 15px;
+        margin-bottom: 10px;
+      }
+      .info-table td {
+        padding: 5px;
         font-weight: bold;
       }
 
-      /* ===== Semester Header Bar ===== */
       .sem-header {
-        background: #444;
+        background: #343a40;
         color: white;
-        padding: 5px 15px;
-        margin-top: 15px;
+        padding: 6px 15px;
+        margin-top: 20px;
         font-size: 14px;
+        font-weight: bold;
+        text-transform: uppercase;
+        border-radius: 3px;
       }
 
-      /* ===== Marks Table Styling ===== */
       .marks-table {
         width: 100%;
         border-collapse: collapse;
@@ -61,103 +72,106 @@
       .marks-table th,
       .marks-table td {
         border: 1px solid #000;
-        padding: 5px;
+        padding: 6px;
         text-align: center;
       }
       .marks-table th {
-        background-color: #f0f0f0;
-      }
-
-      /* ===== Summary Boxes (SGPA / Totals) ===== */
-      .summary-box {
-        background: #f9f9f9;
-        border: 1px solid #ccc;
-        padding: 10px;
-        margin-top: 5px;
-        font-size: 12px;
+        background-color: #f2f2f2;
         font-weight: bold;
       }
+      .text-left {
+        text-align: left !important;
+        padding-left: 10px;
+      }
 
-      /* ===== SGPA Summary Table (3rd Year Pattern) ===== */
+      .summary-msg-box {
+        background: #f8f9fa;
+        border: 1px solid #ccc;
+        border-left: 5px solid #007bff;
+        padding: 10px;
+        margin-top: 5px;
+        font-size: 12.5px;
+        font-weight: bold;
+        color: #222;
+      }
+
       .sgpa-summary-table {
         width: 100%;
         border-collapse: collapse;
         margin-top: 10px;
         text-align: center;
-        font-size: 12px;
+        font-size: 13px;
       }
       .sgpa-summary-table th,
       .sgpa-summary-table td {
         border: 1px solid #000;
-        padding: 6px;
+        padding: 8px;
       }
       .sgpa-summary-table th {
-        background: #f2f2f2;
+        background-color: #eee;
       }
 
-      /* ===== Final Result Footer ===== */
       .footer-result {
-        margin-top: 20px;
+        margin-top: 25px;
         padding: 15px;
         border: 2px solid #000;
         display: flex;
         justify-content: space-between;
-        font-size: 16px;
-        background: #eee;
+        align-items: center;
+        font-size: 17px;
+        background: #f1f1f1;
         font-weight: bold;
       }
-
-      /* ===== Pass / Fail Color Coding ===== */
-      .pass {
-        color: green;
+      .pass-text {
+        color: #28a745;
       }
-      .fail {
-        color: red;
+      .fail-text {
+        color: #dc3545;
       }
 
-      /* ===== Notes & Legends Section ===== */
-      .notes {
+      .notes-section {
+        margin-top: 15px;
         font-size: 11px;
-        margin-top: 10px;
-        font-style: italic;
+        border-top: 1px dashed #666;
+        padding-top: 10px;
       }
 
-      /* ===== Print Button ===== */
       .print-btn {
         display: block;
         margin: 20px auto;
-        padding: 10px 25px;
+        padding: 12px 30px;
         background: #007bff;
         color: white;
         border: none;
         cursor: pointer;
         border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
       }
-
-      /* ===== Print Media Rules ===== */
       @media print {
         .print-btn {
           display: none;
         }
+        body {
+          background: white;
+          padding: 0;
+        }
         .report-card {
           box-shadow: none;
           width: 100%;
+          padding: 10px;
         }
       }
     </style>
   </head>
 
   <body>
-    <!-- ===== Main Report Card Wrapper ===== -->
     <div class="report-card">
-
-      <!-- ===== University Header ===== -->
       <div class="header">
-        <h2 style="margin: 0">Savitribai Phule Pune University</h2>
-        <p><strong>OFFICIAL COLLEGE LEDGER STATEMENT</strong></p>
+        <h2>Savitribai Phule Pune University</h2>
+        <p>COLLEGE LEDGER CUM STATEMENT OF MARKS</p>
       </div>
 
-      <!-- ===== Student Basic Information ===== -->
       <table class="info-table">
         <tr>
           <td>NAME: {{ student.full_name }}</td>
@@ -170,14 +184,17 @@
       </table>
 
       <!-- ========================================================= -->
-      <!-- CASE 1: FIRST YEAR (NEP PATTERN – SEMESTER I & II) -->
+      <!-- SECTION 1: NEP PATTERN (FY & SY) - SEMESTER I, II, III, IV -->
       <!-- ========================================================= -->
-      {% if student.sem1_subjects or student.sem2_subjects %}
-
-      <!-- ===== Semester I ===== -->
-      <div class="sem-header">SEMESTER I</div>
-
-      <!-- Semester I Marks Table -->
+      {% if student.sem1_subjects or student.sem2_subjects or
+      student.sem3_subjects or student.sem4_subjects %} {% for sem_num in ['1',
+      '2', '3', '4'] %} {% set subjects = student['sem' + sem_num + '_subjects']
+      %} {% set summary = student['sem' + sem_num + '_summary'] %} {% if
+      subjects %}
+      <div class="sem-header">
+        Semester {{ 'I' if sem_num == '1' else 'II' if sem_num == '2' else 'III'
+        if sem_num == '3' else 'IV' }}
+      </div>
       <table class="marks-table">
         <thead>
           <tr>
@@ -202,88 +219,36 @@
           </tr>
         </thead>
         <tbody>
-          {% for sub in student.sem1_subjects %}
+          {% for sub in subjects %}
           <tr>
-            <td style="text-align: left">{{ sub.code }}: {{ sub.name }}</td>
+            <td class="text-left">
+              <strong>{{ sub.code }}</strong>: {{ sub.name }}
+            </td>
             <td>{{ sub.p_int }}</td>
             <td>{{ sub.int_m }}</td>
             <td>{{ sub.p_ext }}</td>
             <td>{{ sub.ext_m }}</td>
             <td>{{ sub.p_pr }}</td>
             <td>{{ sub.pr_m }}</td>
-            <td>{{ sub.total }}</td>
+            <td><strong>{{ sub.total }}</strong></td>
             <td>{{ sub.crd }}</td>
             <td>{{ sub.ern }}</td>
-            <td>{{ sub.grd }}</td>
+            <td><strong>{{ sub.grd }}</strong></td>
             <td>{{ sub.gp }}</td>
             <td>{{ sub.cp }}</td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
-
-      <!-- Semester I SGPA Summary -->
-      <div class="summary-box">{{ student.sem1_summary }}</div>
-
-      <!-- ===== Semester II ===== -->
-      <div class="sem-header">SEMESTER II</div>
-
-      <!-- Semester II Marks Table -->
-      <table class="marks-table">
-        <thead>
-          <tr>
-            <th rowspan="2">Subject Code & Name</th>
-            <th colspan="2">Internal</th>
-            <th colspan="2">External</th>
-            <th colspan="2">Practical</th>
-            <th rowspan="2">Total</th>
-            <th rowspan="2">Crd</th>
-            <th rowspan="2">Ern</th>
-            <th rowspan="2">Grd</th>
-            <th rowspan="2">GP</th>
-            <th rowspan="2">CP</th>
-          </tr>
-          <tr>
-            <th>P</th>
-            <th>M</th>
-            <th>P</th>
-            <th>M</th>
-            <th>P</th>
-            <th>M</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for sub in student.sem2_subjects %}
-          <tr>
-            <td style="text-align: left">{{ sub.code }}: {{ sub.name }}</td>
-            <td>{{ sub.p_int }}</td>
-            <td>{{ sub.int_m }}</td>
-            <td>{{ sub.p_ext }}</td>
-            <td>{{ sub.ext_m }}</td>
-            <td>{{ sub.p_pr }}</td>
-            <td>{{ sub.pr_m }}</td>
-            <td>{{ sub.total }}</td>
-            <td>{{ sub.crd }}</td>
-            <td>{{ sub.ern }}</td>
-            <td>{{ sub.grd }}</td>
-            <td>{{ sub.gp }}</td>
-            <td>{{ sub.cp }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
-      <!-- Semester II SGPA Summary -->
-      <div class="summary-box">{{ student.sem2_summary }}</div>
+      <div class="summary-msg-box">{{ summary }}</div>
+      {% endif %} {% endfor %}
 
       <!-- ========================================================= -->
-      <!-- CASE 2: THIRD YEAR (2019 PATTERN) -->
+      <!-- SECTION 2: 2019 PATTERN (TY - SEMESTER I TO VI SUMMARY) -->
       <!-- ========================================================= -->
       {% elif student.subjects %}
 
-      <!-- Subject-wise Performance Table -->
-      <div class="sem-header">SUBJECT WISE PERFORMANCE (2019 PATTERN)</div>
-
+      <div class="sem-header">Subject Wise Performance (2019 Pattern)</div>
       <table class="marks-table">
         <thead>
           <tr>
@@ -298,76 +263,83 @@
         <tbody>
           {% for sub in student.subjects %}
           <tr>
-            <td style="text-align: left">{{ sub.code }}</td>
+            <td class="text-left"><strong>{{ sub.code }}</strong></td>
             <td>{{ sub.internal }}</td>
             <td>{{ sub.external }}</td>
             <td><strong>{{ sub.total }}</strong></td>
-            <td>{{ sub.grade }}</td>
+            <td><strong>{{ sub.grade }}</strong></td>
             <td>{{ sub.credits }}</td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
 
-      <!-- SGPA Summary for All 6 Semesters -->
-      <div style="margin-top: 15px">
+      <div style="margin-top: 20px">
         <strong>SGPA SUMMARY:</strong>
         <table class="sgpa-summary-table">
-          <tr>
-            <th>I</th>
-            <th>II</th>
-            <th>III</th>
-            <th>IV</th>
-            <th>V</th>
-            <th>VI</th>
-          </tr>
-          <tr>
-            <td>{{ student.sgpa.get('1', '-') }}</td>
-            <td>{{ student.sgpa.get('2', '-') }}</td>
-            <td>{{ student.sgpa.get('3', '-') }}</td>
-            <td>{{ student.sgpa.get('4', '-') }}</td>
-            <td>{{ student.sgpa.get('5', '-') }}</td>
-            <td>{{ student.sgpa.get('6', '-') }}</td>
-          </tr>
+          <thead>
+            <tr>
+              <th>I</th>
+              <th>II</th>
+              <th>III</th>
+              <th>IV</th>
+              <th>V</th>
+              <th>VI</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ student.sgpa.get('1', '-') }}</td>
+              <td>{{ student.sgpa.get('2', '-') }}</td>
+              <td>{{ student.sgpa.get('3', '-') }}</td>
+              <td>{{ student.sgpa.get('4', '-') }}</td>
+              <td>{{ student.sgpa.get('5', '-') }}</td>
+              <td>{{ student.sgpa.get('6', '-') }}</td>
+            </tr>
+          </tbody>
         </table>
       </div>
 
-      <!-- Final Summary -->
-      <div class="summary-box" style="display: flex; justify-content: space-around; margin-top: 10px">
-        <span>Total Marks: {{ student.total_marks }}</span>
-        <span>CGPA: {{ student.cgpa }}</span>
-        <span>Final Grade: {{ student.final_grade }}</span>
+      <div
+        class="summary-msg-box"
+        style="display: flex; justify-content: space-around; margin-top: 15px"
+      >
+        <span>Total Credit Pts: {{ student.total_marks }}</span>
+        {% if student.cgpa and student.cgpa != "-" %}<span
+          >CGPA: {{ student.cgpa }}</span
+        >{% endif %} {% if student.final_grade and student.final_grade != "-"
+        %}<span>Final Grade: {{ student.final_grade }}</span>{% endif %}
       </div>
 
       {% endif %}
 
-      <!-- ===== Common Footer Result Section ===== -->
+      <!-- ========================================================= -->
+      <!-- COMMON FOOTER FOR ALL REPORTS -->
+      <!-- ========================================================= -->
       <div class="footer-result">
         <div>
-          {% if student.fy_total_msg %}
-            {{ student.fy_total_msg }}
-          {% else %}
-            Result Processed as per University Norms
-          {% endif %}
+          {% if student.fy_total_msg %} {{ student.fy_total_msg }} {% else %}
+          Result processed as per University Examination Records {% endif %}
         </div>
-        <div>
-          RESULT:
-          <span class="{{ 'pass' if 'PASS' in student.result.upper() else 'fail' }}">
-            {{ student.result }}
-          </span>
+        <div
+          class="{{ 'pass-text' if 'PASS' in student.result.upper() else 'fail-text' }}"
+        >
+          RESULT: {{ student.result }}
         </div>
       </div>
 
-      <!-- ===== Notes & Legends (Optional) ===== -->
       {% if student.applied_legends or student.extra_notes %}
-      <div class="notes">
+      <div class="notes-section">
         <strong>Notes & Abbreviations:</strong><br />
-        {% for legend in student.applied_legends %} {{ legend }} | {% endfor %}
-        {% for note in student.extra_notes %} • {{ note }} <br /> {% endfor %}
+        {% if student.applied_legends %} {{ student.applied_legends | join(' |
+        ') }} {% endif %} {% if student.extra_notes %}
+        <div style="margin-top: 5px">
+          {% for note in student.extra_notes %} • {{ note }} <br />{% endfor %}
+        </div>
+        {% endif %}
       </div>
       {% endif %}
 
-      <!-- ===== Print Button ===== -->
       <button onclick="window.print()" class="print-btn">
         Print Official Report
       </button>

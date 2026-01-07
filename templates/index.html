@@ -74,6 +74,26 @@
 
         <button type="submit">Analyze PDF</button>
       </form>
+      <hr />
+      <h3>View Saved Reports</h3>
+      <form action="{{ url_for('view_saved') }}" method="get">
+        <label>Course:</label>
+        <select name="course" required>
+          <option value="bcs">B.Sc. (Computer Science)</option>
+          <option value="bca">B.C.A. (Science)</option>
+        </select>
+
+        <label>Year:</label>
+        <select name="year" required>
+          <option value="fy">First Year (F.Y.)</option>
+          <option value="sy">Second Year (S.Y.)</option>
+          <option value="ty">Third Year (T.Y.)</option>
+        </select>
+
+        <button type="submit" style="background-color: #17a2b8">
+          View Saved Data
+        </button>
+      </form>
     </div>
   </body>
 </html>

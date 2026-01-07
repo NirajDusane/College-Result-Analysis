@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SY Official Report Card</title>
+    <style>
+      body {
+        font-family: "Times New Roman", Times, serif;
+        background-color: #f4f4f4;
+        padding: 10px;
+        margin: 0;
+      }
+      .report-card {
+        background: white;
+        width: 297mm;
+        padding: 25px;
+        box-sizing: border-box;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        margin: auto;
+        border: 1px solid #ddd;
+      }
+      .header {
+        text-align: center;
+        border-bottom: 2px solid #000;
+        padding-bottom: 5px;
+      }
+      .header h2 {
+        margin: 0;
+        text-transform: uppercase;
+        font-size: 20px;
+      }
+      .info-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        font-size: 14px;
+      }
+      .info-table td {
+        padding: 4px;
+        font-weight: bold;
+      }
+      .sem-header {
+        background: #343a40;
+        color: white;
+        padding: 5px 12px;
+        margin-top: 20px;
+        font-size: 13px;
+        font-weight: bold;
+        border-radius: 3px;
+      }
+      .marks-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 5px;
+        font-size: 10px;
+      }
+      .marks-table th,
+      .marks-table td {
+        border: 1px solid #000;
+        padding: 4px;
+        text-align: center;
+      }
+      .marks-table th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+      }
+      .text-left {
+        text-align: left !important;
+        padding-left: 5px;
+      }
+      .summary-box {
+        background: #fdfdfd;
+        border-left: 5px solid #007bff;
+        padding: 8px;
+        margin-top: 5px;
+        font-size: 11px;
+        font-weight: bold;
+      }
+      .footer-result {
+        margin-top: 20px;
+        padding: 12px;
+        border: 2px solid #000;
+        display: flex;
+        justify-content: space-between;
+        background: #eee;
+        font-weight: bold;
+        font-size: 15px;
+      }
+      .pass {
+        color: green;
+      }
+      .fail {
+        color: red;
+      }
+      .print-btn {
+        display: block;
+        margin: 15px auto;
+        padding: 10px 25px;
+        background: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      @media print {
+        .print-btn {
+          display: none;
+        }
+        .report-card {
+          box-shadow: none;
+          width: 100%;
+          border: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="report-card">
+      <div class="header">
+        <h2>Savitribai Phule Pune University</h2>
+        <p>COLLEGE LEDGER CUM STATEMENT OF MARKS (SY-NEP)</p>
+      </div>
+
+      <table class="info-table">
+        <tr>
+          <td>NAME: {{ student.full_name }}</td>
+          <td style="text-align: right">SEAT NO: {{ student.seat_no }}</td>
+        </tr>
+        <tr>
+          <td>MOTHER: {{ student.mother_name }}</td>
+          <td style="text-align: right">PRN: {{ student.prn }}</td>
+        </tr>
+      </table>
+
+      {% for sem in ['1', '2', '3', '4'] %} {% set sub_key = 'sem' + sem +
+      '_subjects' %} {% set sum_key = 'sem' + sem + '_summary' %} {% if
+      student[sub_key] %}
+      <div class="sem-header">SEMESTER {{ sem }}</div>
+      <table class="marks-table">
+        <thead>
+          <tr>
+            <th rowspan="2" style="width: 35%">Subject Code & Name</th>
+            <th colspan="2">Internal</th>
+            <th colspan="2">External</th>
+            <th colspan="2">Practical</th>
+            <th rowspan="2">Tot</th>
+            <th rowspan="2">Crd</th>
+            <th rowspan="2">Ern</th>
+            <th rowspan="2">Grd</th>
+            <th rowspan="2">GP</th>
+            <th rowspan="2">CP</th>
+          </tr>
+          <tr>
+            <th>P</th>
+            <th>M</th>
+            <th>P</th>
+            <th>M</th>
+            <th>P</th>
+            <th>M</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for sub in student[sub_key] %}
+          <tr>
+            <td class="text-left">
+              <strong>{{ sub.code }}</strong>: {{ sub.name }}
+            </td>
+            <td>{{ sub.p_int }}</td>
+            <td>{{ sub.int_m }}</td>
+            <td>{{ sub.p_ext }}</td>
+            <td>{{ sub.ext_m }}</td>
+            <td>{{ sub.p_pr }}</td>
+            <td>{{ sub.pr_m }}</td>
+            <td><strong>{{ sub.total }}</strong></td>
+            <td>{{ sub.crd }}</td>
+            <td>{{ sub.ern }}</td>
+            <td><strong>{{ sub.grd }}</strong></td>
+            <td>{{ sub.gp }}</td>
+            <td>{{ sub.cp }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="summary-box">{{ student[sum_key] }}</div>
+      {% endif %} {% endfor %}
+
+      <div class="footer-result">
+        <div>{{ student.fy_total_msg }}</div>
+        <div>
+          RESULT:
+          <span
+            class="{{ 'pass' if 'PASS' in student.result.upper() else 'fail' }}"
+            >{{ student.result }}</span
+          >
+        </div>
+      </div>
+
+      <button onclick="window.print()" class="print-btn">
+        Print SY Official Report
+      </button>
+    </div>
+  </body>
+</html>

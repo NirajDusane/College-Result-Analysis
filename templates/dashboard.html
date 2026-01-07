@@ -336,6 +336,11 @@
           <button onclick="resetAllFilters()" class="btn-reset">
             Reset / Show All
           </button>
+          <form action="{{ url_for('save_to_db') }}" method="post">
+            <button type="submit" class="btn" style="background-color: #28a745">
+              Save to Database
+            </button>
+          </form>
         </div>
       </div>
 

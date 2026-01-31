@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leadger - {% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="nav-logo">
+        <span class="logo-sub">{{ dynamic_college_name }}</span>
+    </div>
+
+    {% if request.path != '/' %}
+    <div class="nav-links">
+        <a href="{{ url_for('home') }}">Upload New PDF</a>
+        <a href="{{ url_for('student_analysis') }}">Student Analysis</a>
+        <a href="{{ url_for('subject_analysis') }}">Subject Analysis</a>
+    </div>
+    {% endif %}
+
+    <div class="nav-actions">
+        <label class="theme-switch">
+            <input type="checkbox" id="checkbox" onclick="toggleTheme()">
+            <span class="slider round"></span>
+        </label>
+        <span class="mode-text">Mode</span>
+    </div>
+</nav>
+<main class="main-wrapper">{% block content %}{% endblock %}</main>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div id="toast-container" class="toast-container">
+      {% for category, message in messages %}
+        <div class="toast-card toast-{{ category }}">
+          <div class="toast-icon">
+            {% if category == 'danger' %} ❌ {% elif category == 'warning' %} ⚠️ {% else %} ✅ {% endif %}
+          </div>
+          <div class="toast-content">
+            <div class="toast-title">{{ 'Error' if category == 'danger' else 'Notification' }}</div>
+            <div class="toast-message">{{ message }}</div>
+          </div>
+          <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+  <div id="loader-overlay">
+    <div class="spinner"></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const messageElements = document.querySelectorAll("#flash-messages .msg");
+
+      if (messageElements.length > 0) {
+        if (typeof showLoader === "function") {
+          showLoader(false);
+        } else {
+          const loader = document.getElementById("loader-overlay");
+          if (loader) loader.style.display = "none";
+        }
+        messageElements.forEach(function (el) {
+          const message = el.innerText;
+          setTimeout(() => {
+            alert(message);
+          }, 100);
+        });
+      }
+    });
+  </script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>

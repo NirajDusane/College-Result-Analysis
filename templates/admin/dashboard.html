@@ -1,0 +1,41 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Dashboard - Admin Panel{% endblock %}
+{% block header_title %}Admin Statistics{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <h3>{{ stats.total_students }}</h3>
+        <p>Total Records</p>
+    </div>
+    <div class="stat-card">
+        <h3>{{ stats.total_subjects }}</h3>
+        <p>Active Subjects</p>
+    </div>
+    <div class="stat-card status-online">
+        <h3>Active</h3>
+        <p>Database Status</p>
+    </div>
+</div>
+
+<section id="danger-zone" class="section-card danger-card">
+    <h2><i class="fas fa-exclamation-triangle"></i> Danger Zone</h2>
+    <p>Destructive actions require secondary password confirmation.</p>
+    <button onclick="showDeleteModal()" class="btn btn-danger">Clear Database Records</button>
+</section>
+
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <h3>Confirm Destructive Action</h3>
+        <form action="/admin/danger/truncate-students" method="POST">
+            <p>Please enter your <strong>Secondary Password</strong> to continue:</p>
+            <input type="password" name="secondary_password" placeholder="Operations Password" required>
+            <div class="modal-buttons">
+                <button type="button" onclick="hideModal()" class="btn">Cancel</button>
+                <button type="submit" class="btn btn-danger">Yes, Delete All</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

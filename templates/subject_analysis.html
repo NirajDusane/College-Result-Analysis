@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}Subject Analysis{% endblock %}
+
+{% block content %}
+<div class="main-wrapper" style="padding-top: 15px;">
+    <div class="course-header-strip" style="margin-bottom: 10px; padding: 10px 20px;">
+        <div class="course-title">
+            <span class="badge">Analysis</span>
+            <strong style="font-size: 14px;">{{ selected_subject_name if selected_subject else 'Subject Performance'
+                }}</strong>
+        </div>
+        <div class="course-meta">
+            <a href="{{ url_for('dashboard') }}" class="btn-view">← Back</a>
+        </div>
+    </div>
+
+    <div class="controls-panel" style="padding: 15px 25px; margin-bottom: 15px;">
+        <form method="POST" enctype="multipart/form-data"
+            style="display: flex; width: 100%; gap: 15px; align-items: flex-end;">
+            <div style="flex: 1.5;">
+                <label style="font-size: 11px; font-weight: 700; opacity: 0.7;">SELECT SUBJECT</label>
+                <select name="subject_code" id="subjectSelect" required class="advanced-filter">
+                    <option value="" disabled selected>-- Choose --</option>
+                    {% for code in unique_subjects %}
+                    <option value="{{ code }}" {{ 'selected' if code==selected_subject }}>
+                        {{ code }} : {{ subject_map.get(code, 'Unknown') }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="flex: 1;">
+                <label style="font-size: 11px; font-weight: 700; opacity: 0.7;">EXCEL FILTER</label>
+                <input type="file" name="student_excel" accept=".xlsx, .xls" class="search-box" style="padding: 7px;">
+            </div>
+            <button type="submit" class="btn-primary" style="height: 42px; padding: 0 25px;">Analyze</button>
+        </form>
+    </div>
+
+    {% if selected_subject %}
+    <div class="kpi-box" style="margin-bottom: 10px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+        <div class="box color-total" onclick="filterTable('all', 'all')" style="padding: 12px;">
+            <p style="font-size: 10px;">APPEARED</p>
+            <h4 style="font-size: 22px;">{{ stats.total }}</h4>
+        </div>
+        <div class="box color-pass" onclick="filterTable('all', 'pass')" style="padding: 12px;">
+            <p style="font-size: 10px;">OVERALL PASS</p>
+            <h4 style="font-size: 22px;">{{ stats.pass }}</h4>
+        </div>
+        <div class="box color-fail" onclick="filterTable('all', 'fail')" style="padding: 12px;">
+            <p style="font-size: 10px;">OVERALL FAIL</p>
+            <h4 style="font-size: 22px;">{{ stats.fail }}</h4>
+        </div>
+        <div class="box" onclick="filterByToppers()"
+            style="background: linear-gradient(135deg, #f59e0b, #d97706); padding: 12px; border: 1px solid gold;">
+            <p style="font-size: 10px;">🏆 VIEW TOP 3</p>
+            <h4 style="font-size: 22px;">TOPPERS</h4>
+        </div>
+    </div>
+
+    {% if show_gender %}
+    <div class="kpi-box" style="margin-bottom: 15px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+        <div class="box" onclick="filterTable('Male', 'all')" style="background: #1e40af; padding: 10px;">
+            <p style="font-size: 9px;">♂ MALE TOTAL</p>
+            <h4 style="font-size: 18px;">{{ stats.male }}</h4>
+        </div>
+        <div class="box" onclick="filterTable('Male', 'pass')"
+            style="background: #1e3a8a; border-bottom: 3px solid var(--color-pass); padding: 10px;">
+            <p style="font-size: 9px;">♂ MALE PASS</p>
+            <h4 style="font-size: 18px;">{{ stats.male_pass }}</h4>
+        </div>
+        <div class="box" onclick="filterTable('Female', 'all')" style="background: #9d174d; padding: 10px;">
+            <p style="font-size: 9px;">♀ FEMALE TOTAL</p>
+            <h4 style="font-size: 18px;">{{ stats.female }}</h4>
+        </div>
+        <div class="box" onclick="filterTable('Female', 'pass')"
+            style="background: #831843; border-bottom: 3px solid var(--color-pass); padding: 10px;">
+            <p style="font-size: 9px;">♀ FEMALE PASS</p>
+            <h4 style="font-size: 18px;">{{ stats.female_pass }}</h4>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="kpi-box" style="margin-bottom: 15px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;">
+        <div class="box" onclick="filterByGradeClass('distinction')" style="background: #7c3aed; padding: 10px;">
+            <p style="font-size: 9px;">DISTINCTION</p>
+            <h4 style="font-size: 16px;">{{ stats.distinction }}</h4>
+        </div>
+        <div class="box color-pass" onclick="filterByGradeClass('first_class')" style="padding: 10px;">
+            <p style="font-size: 9px;">FIRST CLASS</p>
+            <h4 style="font-size: 16px;">{{ stats.first_class }}</h4>
+        </div>
+        <div class="box color-atkt" onclick="filterByGradeClass('higher_second')" style="padding: 10px;">
+            <p style="font-size: 9px;">HIGHER SECOND CLASS</p>
+            <h4 style="font-size: 16px;">{{ stats.higher_second }}</h4>
+        </div>
+        <div class="box" onclick="filterByGradeClass('second_class')" style="background: #ea580c; padding: 10px;">
+            <p style="font-size: 9px;">SECOND CLASS</p>
+            <h4 style="font-size: 16px;">{{ stats.second_class }}</h4>
+        </div>
+        <div class="box color-total" onclick="filterByGradeClass('pass_class')" style="padding: 10px;">
+            <p style="font-size: 9px;">PASS CLASS</p>
+            <h4 style="font-size: 16px;">{{ stats.pass_class }}</h4>
+        </div>
+    </div>
+
+    <div style="margin-bottom: 15px; text-align: right;">
+        <a href="{{ url_for('generate_subject_report', subject_code=selected_subject) }}" 
+        id="printReportBtn"
+        target="_blank" 
+        class="btn-report-print">
+        <i class="fas fa-print"></i> 📄 Generate Detailed PDF Report
+        </a>
+    </div>
+
+    <div class="table-container" style="max-height: 400px;">
+        <table id="studentTable">
+            <thead>
+                <tr>
+                    <th>Seat No</th>
+                    <th style="text-align: left;">Student Name</th>
+                    {% if show_gender %} <th>Gender</th> {% endif %}
+                    <th>Int.</th>
+                    <th>Ext.</th>
+                    <th>Total</th>
+                    <th>Grd</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody id="studentTableBody">
+                {% set topper_seats = top_3 | map(attribute='seat_no') | list %}
+                {% for std in subject_data %}
+                <tr data-gender="{{ std.gender }}" data-status="{{ std.status | lower }}"
+                    data-grade-class="{{ std.grade_class }}"
+                    data-is-topper="{{ 'true' if std.seat_no in topper_seats else 'false' }}">
+                    <td>{{ std.seat_no }}</td>
+                    <td style="text-align: left; font-weight: 500;">{{ std.name }}</td>
+                    {% if show_gender %} <td>{{ std.gender }}</td> {% endif %}
+                    <td>{{ std.internal }}</td>
+                    <td>{{ std.external }}</td>
+                    <td><strong>{{ std.total }}</strong></td>
+                    <td>{{ std.grade }}</td>
+                    <td><span class="status-badge status-{{ std.status | lower }}">{{ std.status }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

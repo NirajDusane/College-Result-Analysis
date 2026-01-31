@@ -1,0 +1,191 @@
+:root {
+  --bg-dark: #0f172a;
+  --card-bg: #1e293b;
+  --accent: #3b82f6;
+  --danger: #ef4444;
+  --text: #f1f5f9;
+  --sidebar-w: 200px;
+  --sidebar-collapsed-w: 70px; 
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: var(--bg-dark);
+  color: var(--text);
+  overflow-x: hidden; /* बाजूला स्क्रोल येऊ नये म्हणून */
+}
+
+/* Sidebar */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--card-bg);
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-right: 1px solid #334155;
+  transition: width 0.3s ease; /* ✨ विड्थ बदलताना स्मूथ ट्रांझिशन */
+  z-index: 1000;
+}
+/* Sidebar & Layout Fix */
+.sidebar.collapsed {
+  width: var(--sidebar-collapsed-w); /* ✨ ७० पिक्सेल विड्थ */
+}
+
+.sidebar.collapsed .nav-text {
+  display: none;
+}
+
+.sidebar-header {
+  padding: 30px;
+  font-weight: 800;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+}
+.nav-item {
+  padding: 15px 30px;
+  text-decoration: none;
+  color: #94a3b8;
+  transition: 0.3s;
+}
+.nav-item:hover {
+  background: #334155;
+  color: white;
+  border-left: 4px solid var(--accent);
+}
+.nav-logout {
+  margin-top: auto;
+  padding: 20px 30px;
+  color: var(--danger);
+  text-decoration: none;
+}
+
+/* Main Content */
+.main-content {
+  /* डिफॉल्ट स्थिती (Sidebar Expanded असताना) */
+  margin-left: var(--sidebar-w);
+  width: calc(100% - var(--sidebar-w));
+  padding: 40px;
+  min-height: 100vh;
+  transition: margin-left 0.3s ease, width 0.3s ease; /* ✨ स्मूथली रुंद होण्यासाठी */
+  box-sizing: border-box;
+}
+
+/* ✨ जेव्हा साइडबार कोलमडतो, तेव्हा हा क्लास मेन कंटेंटला विस्तीर्ण (Wide) करेल */
+.main-content.expanded {
+  margin-left: var(--sidebar-collapsed-w);
+  width: calc(100% - var(--sidebar-collapsed-w));
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* ✨ मोठ्या स्क्रीनवर आपोआप ॲडजस्ट होईल */
+  gap: 25px;
+  margin-bottom: 40px;
+}
+.stat-card {
+  background: var(--card-bg);
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+}
+.section-card {
+  background: var(--card-bg);
+  padding: 30px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+.danger-card {
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* Buttons */
+.btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn-primary {
+  background: var(--accent);
+  color: white;
+}
+.btn-danger {
+  background: var(--danger);
+  color: white;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  align-items: center;
+  justify-content: center;
+}
+.modal-content {
+  background: var(--card-bg);
+  padding: 40px;
+  border-radius: 15px;
+  width: 400px;
+}
+/* Table Explorer Styles */
+.form-select {
+  width: 100%;
+  max-width: 300px;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--bg-dark);
+  color: white;
+  border: 1px solid #334155;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.data-explorer-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-explorer-table th {
+  background: #334155;
+  color: var(--accent);
+  padding: 15px;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  font-size: 0.85rem;
+  
+}
+
+.data-explorer-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #334155;
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  vertical-align: top;
+}
+
+.data-explorer-table tr:hover {
+  background: rgba(59, 130, 246, 0.05);
+}
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  background: var(--card-bg);
+  border-radius: 12px;
+}
+
+

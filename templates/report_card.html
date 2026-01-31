@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Official Statement of Marks - PCMCS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+
+<body style="background-color: var(--bg-main); padding-bottom: 60px">
+    <div class="report-card">
+        <div class="header">
+            <h2 class="uni-name">Savitribai Phule Pune University</h2>
+            <p class="college-name">
+                Panchavati College of Management and Computer Science
+            </p>
+            <p class="doc-subtitle">COLLEGE LEDGER CUM STATEMENT OF MARKS</p>
+        </div>
+
+        <div class="student-info-grid">
+            <div class="info-item"><span>NAME:</span> {{ student.full_name }}</div>
+            <div class="info-item text-right">
+                <span>SEAT NO:</span> {{ student.seat_no }}
+            </div>
+            <div class="info-item">
+                <span>MOTHER:</span> {{ student.mother_name }}
+            </div>
+            <div class="info-item text-right">
+                <span>PRN:</span> {{ student.prn }}
+            </div>
+        </div>
+
+        {% if student.sem1_subjects or student.sem2_subjects or student.sem3_subjects or student.sem4_subjects %}
+        {% for sem_num in ['1', '2', '3', '4'] %}
+        {% set subjects = student['sem' + sem_num + '_subjects'] %}
+        {% set summary = student['sem' + sem_num + '_summary'] %}
+        {% if subjects %}
+        <div class="semester-section">
+            <div class="sem-badge">
+                Semester {{ 'I' if sem_num == '1' else 'II' if sem_num == '2' else 'III' if sem_num == '3' else 'IV' }}
+            </div>
+
+            <div class="table-responsive">
+                <table class="marks-display-table">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" class="text-left">Subject Code & Name</th>
+                            <th colspan="2">Internal</th>
+                            <th colspan="2">External</th>
+                            <th colspan="2">Practical</th>
+                            <th rowspan="2">Total</th>
+                            <th rowspan="2">Grd</th>
+                            <th rowspan="2">GP</th>
+                            <th rowspan="2">CP</th>
+                        </tr>
+                        <tr>
+                            <th>P</th>
+                            <th>M</th>
+                            <th>P</th>
+                            <th>M</th>
+                            <th>P</th>
+                            <th>M</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sub in subjects %}
+                        <tr>
+                            <td class="text-left subject-cell">
+                                <span class="sub-code">{{ sub.code }}</span> {{ sub.name }}
+                            </td>
+                            <td>{{ sub.p_int }}</td>
+                            <td>{{ sub.int_m }}</td>
+                            <td>{{ sub.p_ext }}</td>
+                            <td>{{ sub.ext_m }}</td>
+                            <td>{{ sub.p_pr }}</td>
+                            <td>{{ sub.pr_m }}</td>
+                            <td class="font-600">{{ sub.total }}</td>
+                            <td class="font-600">{{ sub.grd }}</td>
+                            <td>{{ sub.gp }}</td>
+                            <td>{{ sub.cp }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="sem-summary-footer">{{ summary }}</div>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+        {% elif student.subjects %}
+        <div class="semester-section">
+            <div class="sem-badge">Subject Wise Performance (Current Year)</div>
+            <div class="table-responsive">
+                <table class="marks-display-table">
+                    <thead>
+                        <tr>
+                            <th class="text-left">Subject Code & Name</th>
+                            <th>Internal</th>
+                            <th>External</th>
+                            <th>Total Marks</th>
+                            <th>Grade</th>
+                            <th>Credits</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sub in student.subjects %}
+                        <tr>
+                            <td class="text-left subject-cell">
+                                <span class="sub-code">{{ sub.code }}</span>
+                                {# Subject names are now provided dynamically from app.py/DB #}
+                                {{ sub.name }}
+                            </td>
+                            <td>{{ sub.internal }}</td>
+                            <td>{{ sub.external }}</td>
+                            <td class="font-600">{{ sub.total }}</td>
+                            <td class="font-600">{{ sub.grade }}</td>
+                            <td>{{ sub.credits }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="ty-summary-section">
+                <p class="summary-label">SGPA SUMMARY:</p>
+                <table class="marks-display-table sgpa-mini-table">
+                    <thead>
+                        <tr>
+                            <th>I</th>
+                            <th>II</th>
+                            <th>III</th>
+                            <th>IV</th>
+                            <th>V</th>
+                            <th>VI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ student.sgpa.get('1', '-') }}</td>
+                            <td>{{ student.sgpa.get('2', '-') }}</td>
+                            <td>{{ student.sgpa.get('3', '-') }}</td>
+                            <td>{{ student.sgpa.get('4', '-') }}</td>
+                            <td>{{ student.sgpa.get('5', '-') }}</td>
+                            <td>{{ student.sgpa.get('6', '-') }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="ty-final-stats">
+                <span>Total Credit Pts: <strong>{{ student.total_marks }}</strong></span>
+                {% if student.cgpa and student.cgpa != "-" %}
+                <span>CGPA: <strong>{{ student.cgpa }}</strong></span>
+                {% endif %}
+                {% if student.final_grade and student.final_grade != "-" %}
+                <span>Final Grade: <strong>{{ student.final_grade }}</strong></span>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="report-footer-box">
+            <div class="disclaimer-text">
+                {% if student.fy_total_msg %}
+                {{ student.fy_total_msg }}
+                {% else %}
+                Computer generated statement of marks as per University Examination Records.
+                {% endif %}
+            </div>
+            <div class="result-status-text {{ 'text-pass' if 'PASS' in student.result.upper() else 'text-fail' }}">
+                RESULT: {{ student.result }}
+            </div>
+        </div>
+
+        {% if student.applied_legends or student.extra_notes %}
+        <div class="notes-section">
+            <p><strong>Notes & Abbreviations:</strong></p>
+            {% if student.applied_legends %}
+            {{ student.applied_legends | join(' | ') }}
+            {% endif %}
+            {% if student.extra_notes %}
+            <div style="margin-top: 5px">
+                {% for note in student.extra_notes %} • {{ note }} <br />{% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <button onclick="window.print()" class="floating-print-action">
+            🖨️ Print Official Report
+        </button>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>

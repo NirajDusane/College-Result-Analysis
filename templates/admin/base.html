@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Panel - Secure System{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_style.css') }}">
+</head>
+
+<body>
+    <div class="sidebar" id="adminSidebar">
+        <div class="sidebar-header">
+            <button onclick="toggleSidebar()">
+                <i class="fas fa-user-shield" id="toggleIcon"></i> 
+            </button>
+            <!-- <span class="nav-text">Secure Admin</span> -->
+        </div>
+        
+        <nav class="nav-links">
+            <a href="{{ url_for('admin_dashboard') }}" class="nav-item">
+                <i class="fas fa-chart-pie"></i> 
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="#excel-manager" class="nav-item">
+                <i class="fas fa-file-excel"></i> 
+                <span class="nav-text">Excel Manager</span>
+            </a>
+            <a href="{{ url_for('data_manager_page') }}" class="nav-item">
+                <i class="fas fa-database"></i> 
+                <span class="nav-text">Data Manager</span>
+            </a>
+            <a href="#security" class="nav-item">
+                <i class="fas fa-lock"></i> 
+                <span class="nav-text">Security</span>
+            </a>
+            <div class="nav-divider"></div>
+            <a href="{{ url_for('admin_logout') }}" class="nav-logout">
+                <i class="fas fa-sign-out-alt"></i> 
+                <span class="nav-text">Logout</span>
+            </a>
+        </nav>
+    </div>
+
+    <div class="main-content" id="mainContent">
+        <header class="top-bar">
+            <h1>{% block header_title %}Dashboard Overview{% endblock %}</h1>
+            <div class="user-profile">
+                <span>Welcome, Admin</span>
+            </div>
+        </header>
+
+        <main class="content-body">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/admin_actions.js') }}"></script>
+</body>
+
+</html>

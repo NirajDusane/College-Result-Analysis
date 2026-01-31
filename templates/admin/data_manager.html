@@ -1,0 +1,54 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Data Manager - Admin Panel{% endblock %}
+{% block header_title %}Database Explorer{% endblock %}
+
+{% block content %}
+<div class="section-card">
+    <h3><i class="fas fa-search"></i> Select Table to View Records</h3>
+    <form action="/admin/data-manager/view" method="POST" style="margin-top: 20px;">
+        <select name="table_name" class="form-select" onchange="this.form.submit()">
+            <option value="">-- Choose a Table --</option>
+            {% for table in tables %}
+            <option value="{{ table }}" {% if selected_table == table %}selected{% endif %}>{{ table }}</option>
+            {% endfor %}
+        </select>
+    </form>
+</div>
+
+{% if selected_table %}
+<div class="section-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3><i class="fas fa-table"></i> Data for Table: <span style="color: var(--accent);">{{ selected_table }}</span></h3>
+        <span style="font-size: 0.8rem; color: #94a3b8;">Total Records: {{ rows|length }}</span>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table class="data-explorer-table">
+            <thead>
+                <tr>
+                    {% for col in columns %}
+                        {# ✨ बदल: कोणत्याही स्वरूपातील 'all_data_json' कॉलम पूर्णपणे वगळा #}
+                        {% if col|lower != 'all_data_json' %}
+                            <th>{{ col | upper }}</th>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    {% for col in columns %}
+                        {# ✨ बदल: डेटा सेल्समधून देखील कॉलम पूर्णपणे वगळा #}
+                        {% if col|lower != 'all_data_json' %}
+                            <td>{{ row[col] }}</td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

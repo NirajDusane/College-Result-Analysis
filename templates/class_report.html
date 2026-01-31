@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Overall Class Report - {{ year }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/report_print.css') }}" />
+    <style>
+        .page-break {
+            page-break-after: always;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                padding: 0;
+                margin: 0;
+            }
+
+            .report-container {
+                border: none;
+                box-shadow: none;
+                width: 100% !important;
+            }
+        }
+
+        [contenteditable="true"]:focus {
+            outline: 2px solid #4e73df;
+            background: #f8f9fc;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="no-print edit-controls" onclick="window.print()" style="
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #4e73df;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        z-index: 1000;
+      ">
+        🖨️ Final Print
+    </div>
+
+    <div class="report-container">
+        <div class="page-break">
+            <header class="college-header">
+                <h1 contenteditable="true">
+                    <span class="logo-sub">{{ dynamic_college_name }}</span>
+                </h1>
+                <h2 contenteditable="true">
+                    {{ year }} - Result & Attendance Analysis (Semester {{ sem_a }})
+                </h2>
+            </header>
+
+            <h3>Strength, Attendance & Result Summary (Sem {{ sem_a }})</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th colspan="3">ENROLLED </th>
+                        <th colspan="3">STUDENTS WITH 60% AND ABOVE</th>
+                        <th colspan="3">APPEARED</th>
+                        <th colspan="3">PASSED</th>
+                        <th colspan="3">RESULT %</th>
+                    </tr>
+                    <tr>
+                        <th>Boys</th>
+                        <th>Girls</th>
+                        <th>Total</th>
+                        <th>Boys</th>
+                        <th>Girls</th>
+                        <th>Total</th>
+                        <th>Boys</th>
+                        <th>Girls</th>
+                        <th>Total</th>
+                        <th>Boys</th>
+                        <th>Girls</th>
+                        <th>Total</th>
+                        <th>Boys</th>
+                        <th>Girls</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td contenteditable="true">{{ stats_a.enrolled.boys }}</td>
+                        <td contenteditable="true">{{ stats_a.enrolled.girls }}</td>
+                        <td>{{ stats_a.enrolled.total }}</td>
+
+                        <td>{{ stats_a.perc_60.boys }}</td>
+                        <td>{{ stats_a.perc_60.girls }}</td>
+                        <td>{{ stats_a.perc_60.total }}</td>
+
+                        <td contenteditable="true">{{ stats_a.appeared.boys }}</td>
+                        <td contenteditable="true">{{ stats_a.appeared.girls }}</td>
+                        <td>{{ stats_a.appeared.total }}</td>
+
+                        <td contenteditable="true">{{ stats_a.pass.boys }}</td>
+                        <td contenteditable="true">{{ stats_a.pass.girls }}</td>
+                        <td><strong>{{ stats_a.pass.total }}</strong></td>
+
+                        <td contenteditable="true">
+                            {{ (stats_a.pass.boys / stats_a.appeared.boys * 100 if stats_a.appeared.boys > 0 else
+                            0)|round(2) }}%
+                        </td>
+                        <td contenteditable="true">
+                            {{ (stats_a.pass.girls / stats_a.appeared.girls * 100 if stats_a.appeared.girls > 0 else
+                            0)|round(2) }}%
+                        </td>
+                        <td contenteditable="true" style="background-color: #f8f9fc; font-weight: bold;">
+                            {{ (stats_a.pass.total / stats_a.appeared.total * 100 if stats_a.appeared.total > 0 else
+                            0)|round(2) }}%
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Semester {{ sem_a }}: Subject-wise Analysis</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Subject Name</th>
+                        <th>Code</th>
+                        <th>Subject Teacher</th>
+                        <th>Appeared</th>
+                        <th>Passed</th>
+                        <th>Result %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for code, s in subs_a.items() %}
+                    <tr>
+                        <td style="text-align: left" contenteditable="true">
+                            {{ s.name }}
+                        </td>
+                        <td contenteditable="true">{{ code }}</td>
+                        <td contenteditable="true">Concerned Faculty</td>
+                        <td contenteditable="true">{{ s.app }}</td>
+                        <td contenteditable="true">{{ s.pass }}</td>
+                        <td contenteditable="true">
+                            {{ (s.pass/s.app*100 if s.app > 0 else 0)|round(2) }}%
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <h3>🏆 Semester {{ sem_a }} Toppers</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Student Name</th>
+                        <th>SGPA</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in tops_a %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td style="text-align: left" contenteditable="true">
+                            {{ t.full_name }}
+                        </td>
+                        <td contenteditable="true">{{ t.sgpa }}</td>
+                        <td contenteditable="true"><b>{{ t.perc }}%</b></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <footer class="sig-container" style="
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+          ">
+                <div class="sig-box" style="width: 200px">
+                    <img id="p1-sig-1" class="sig-preview"
+                        style="display: none; max-height: 60px; margin-bottom: 5px" />
+                    <input type="file" class="no-print" onchange="preview(this, 'p1-sig-1')" accept="image/*" />
+                    <div style="border-top: 1px solid #000; padding-top: 5px" contenteditable="true">
+                        Class Teacher
+                    </div>
+                </div>
+                <div class="sig-box" style="width: 200px">
+                    <img id="p1-sig-2" class="sig-preview"
+                        style="display: none; max-height: 60px; margin-bottom: 5px" />
+                    <input type="file" class="no-print" onchange="preview(this, 'p1-sig-2')" accept="image/*" />
+                    <div style="border-top: 1px solid #000; padding-top: 5px" contenteditable="true">
+                        HOD
+                    </div>
+                </div>
+                <div class="sig-box" style="width: 200px">
+                    <img id="p1-sig-3" class="sig-preview"
+                        style="display: none; max-height: 60px; margin-bottom: 5px" />
+                    <input type="file" class="no-print" onchange="preview(this, 'p1-sig-3')" accept="image/*" />
+                    <div style="border-top: 1px solid #000; padding-top: 5px" contenteditable="true">
+                        Principal
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+        <div class="page-break">
+            <header class="college-header">
+                <h1 contenteditable="true">
+                    <span class="logo-sub">{{ dynamic_college_name }}</span>
+                </h1>
+                <h2 contenteditable="true">
+                    {{ year }} - Result & Attendance Analysis (Semester {{ sem_b }})
+                </h2>
+            </header>
+
+            <h3>Strength, Attendance & Result Summary (Sem {{ sem_b }})</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th colspan="3">ENROLLED</th>
+                        <th colspan="3">STUDENTS WITH 60% And Above </th>
+                        <th colspan="3">APPEARED</th>
+                        <th colspan="3">PASSED</th>
+                        <th colspan="3">RESULT %</th>
+                    </tr>
+                    <tr>
+                        <th>Boys</th>
+                        <th>Girls</th>
+                        <th>Total</th>
+                        <th>Boys</th>
+                        <th>Girls</th>
+                        <th>Total</th>
+                        <th>Boys</th>
+                        <th>Girls</th>
+                        <th>Total</th>
+                        <th>Boys</th>
+                        <th>Girls</th>
+                        <th>Total</th>
+                        <th>Boys</th>
+                        <th>Girls</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td contenteditable="true">{{ stats_b.enrolled.boys }}</td>
+                        <td contenteditable="true">{{ stats_b.enrolled.girls }}</td>
+                        <td>{{ stats_b.enrolled.total }}</td>
+
+                        <td>{{ stats_b.perc_60.boys }}</td>
+                        <td>{{ stats_b.perc_60.girls }}</td>
+                        <td>{{ stats_b.perc_60.total }}</td>
+
+
+                        <td contenteditable="true">{{ stats_b.appeared.boys }}</td>
+                        <td contenteditable="true">{{ stats_b.appeared.girls }}</td>
+                        <td>{{ stats_b.appeared.total }}</td>
+
+                        <td contenteditable="true">{{ stats_b.pass.boys }}</td>
+                        <td contenteditable="true">{{ stats_b.pass.girls }}</td>
+                        <td>{{ stats_b.pass.total }}</td>
+
+                        <td contenteditable="true">
+                            {{ (stats_b.pass.boys / stats_b.appeared.boys * 100 if stats_b.appeared.boys > 0 else
+                            0)|round(2) }}%
+                        </td>
+                        <td contenteditable="true">
+                            {{ (stats_b.pass.girls / stats_b.appeared.girls * 100 if stats_b.appeared.girls > 0 else
+                            0)|round(2) }}%
+                        </td>
+                        <td contenteditable="true">
+                            {{ (stats_b.pass.total / stats_b.appeared.total * 100 if stats_b.appeared.total > 0 else
+                            0)|round(2) }}%
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Semester {{ sem_b }}: Subject-wise Analysis</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Subject Name</th>
+                        <th>Code</th>
+                        <th>Subject Teacher</th>
+                        <th>Appeared</th>
+                        <th>Passed</th>
+                        <th>Result %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for code, s in subs_b.items() %}
+                    <tr>
+                        <td style="text-align: left" contenteditable="true">
+                            {{ s.name }}
+                        </td>
+                        <td contenteditable="true">{{ code }}</td>
+                        <td contenteditable="true">Concerned Faculty</td>
+                        <td contenteditable="true">{{ s.app }}</td>
+                        <td contenteditable="true">{{ s.pass }}</td>
+                        <td contenteditable="true">
+                            {{ (s.pass/s.app*100 if s.app > 0 else 0)|round(2) }}%
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <h3>🏆 Semester {{ sem_b }} Toppers</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Student Name</th>
+                        <th>SGPA</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in tops_b %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td style="text-align: left" contenteditable="true">
+                            {{ t.full_name }}
+                        </td>
+                        <td contenteditable="true">{{ t.sgpa }}</td>
+                        <td contenteditable="true"><b>{{ t.perc }}%</b></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <footer class="sig-container" style="
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+          ">
+                <div class="sig-box" style="width: 200px">
+                    <img id="p2-sig-1" class="sig-preview"
+                        style="display: none; max-height: 60px; margin-bottom: 5px" />
+                    <input type="file" class="no-print" onchange="preview(this, 'p2-sig-1')" accept="image/*" />
+                    <div style="border-top: 1px solid #000; padding-top: 5px" contenteditable="true">
+                        Class Teacher
+                    </div>
+                </div>
+                <div class="sig-box" style="width: 200px">
+                    <img id="p2-sig-2" class="sig-preview"
+                        style="display: none; max-height: 60px; margin-bottom: 5px" />
+                    <input type="file" class="no-print" onchange="preview(this, 'p2-sig-2')" accept="image/*" />
+                    <div style="border-top: 1px solid #000; padding-top: 5px" contenteditable="true">
+                        HOD
+                    </div>
+                </div>
+                <div class="sig-box" style="width: 200px">
+                    <img id="p2-sig-3" class="sig-preview"
+                        style="display: none; max-height: 60px; margin-bottom: 5px" />
+                    <input type="file" class="no-print" onchange="preview(this, 'p2-sig-3')" accept="image/*" />
+                    <div style="border-top: 1px solid #000; padding-top: 5px" contenteditable="true">
+                        Principal
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+        <div class="page-break">
+            <header class="college-header">
+                <h1 contenteditable="true">
+                    M.G.V's Panchavati College of Management and Computer Science
+                </h1>
+                <h2 contenteditable="true">
+                    {{ year }} - Overall Annual Result Analysis (Full Year)
+                </h2>
+            </header>
+
+            <h3>Annual Statistics Summary</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Passed</th>
+                        <th>ATKT</th>
+                        <th>Failed</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>OVERALL</td>
+                        <td>{{ annual.pass }}</td>
+                        <td>{{ annual.atkt }}</td>
+                        <td>{{ annual.fail }}</td>
+                        <td>{{ annual.pass + annual.atkt + annual.fail }}</td>
+                    </tr>
+                    <tr>
+                        <td>Male Students</td>
+                        <td>{{ annual.male_pass }}</td>
+                        <td>{{ annual.male_atkt }}</td>
+                        <td>{{ annual.male_fail }}</td>
+                        <td>{{ annual.male_pass + annual.male_atkt + annual.male_fail }}</td>
+                    </tr>
+                    <tr>
+                        <td>Female Students</td>
+                        <td>{{ annual.female_pass }}</td>
+                        <td>{{ annual.female_atkt }}</td>
+                        <td>{{ annual.female_fail }}</td>
+                        <td>{{ annual.female_pass + annual.female_atkt + annual.female_fail }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Annual Grade Distribution (Pass Students)</h3>
+            <div class="grade-box" style="
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+          ">
+                <div class="grade-item" style="border: 1px solid #ddd; padding: 10px; text-align: center">
+                    Distinction (7.75+)<br /><b contenteditable="true">{{ annual.dist }}</b>
+                </div>
+                <div class="grade-item" style="border: 1px solid #ddd; padding: 10px; text-align: center">
+                    First Class (6.75+)<br /><b contenteditable="true">{{ annual.first }}</b>
+                </div>
+                <div class="grade-item" style="border: 1px solid #ddd; padding: 10px; text-align: center">
+                    Higher Second (6.25+)<br /><b contenteditable="true">{{ annual.higher_sec }}</b>
+                </div>
+                <div class="grade-item" style="border: 1px solid #ddd; padding: 10px; text-align: center">
+                    Second Class (5.75+)<br /><b contenteditable="true">{{ annual.second }}</b>
+                </div>
+                <div class="grade-item" style="border: 1px solid #ddd; padding: 10px; text-align: center">
+                    Pass Class (Below 5.75)<br /><b contenteditable="true">{{ annual.pass_class }}</b>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; margin-top: 20px">
+                <div style="flex: 1">
+                    <h4 style="color: #2e59d9">🏆 Overall Top 3</h4>
+                    <table class="data-table" style="font-size: 11px">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>CGPA</th>
+                                <th>%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for t in top_year %}
+                            <tr>
+                                <td contenteditable="true">{{ t.full_name }}</td>
+                                <td contenteditable="true">{{ t.cgpa }}</td>
+                                <td contenteditable="true">{{ t.perc }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div style="flex: 1">
+                    <h4 style="color: #1e40af">♂ Top 3 Male</h4>
+                    <table class="data-table" style="font-size: 11px">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>CGPA</th>
+                                <th>%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for t in top_male %}
+                            <tr>
+                                <td contenteditable="true">{{ t.full_name }}</td>
+                                <td contenteditable="true">{{ t.cgpa }}</td>
+                                <td contenteditable="true">{{ t.perc }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div style="flex: 1">
+                    <h4 style="color: #9d174d">♀ Top 3 Female</h4>
+                    <table class="data-table" style="font-size: 11px">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>CGPA</th>
+                                <th>%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for t in top_female %}
+                            <tr>
+                                <td contenteditable="true">{{ t.full_name }}</td>
+                                <td contenteditable="true">{{ t.cgpa }}</td>
+                                <td contenteditable="true">{{ t.perc }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <footer class="sig-container" style="
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            border-top: 1px dashed #eee;
+            padding-top: 20px;
+          ">
+                <div class="sig-box" style="width: 180px">
+                    <img id="p3-sig-1" class="sig-preview"
+                        style="display: none; max-height: 50px; margin-bottom: 5px" />
+                    <input type="file" class="no-print" onchange="preview(this, 'p3-sig-1')" accept="image/*" />
+                    <div style="border-top: 1px solid #000; padding-top: 5px" contenteditable="true">
+                        Class Teacher
+                    </div>
+                </div>
+                <div class="sig-box" style="width: 180px">
+                    <img id="p3-sig-2" class="sig-preview"
+                        style="display: none; max-height: 50px; margin-bottom: 5px" />
+                    <input type="file" class="no-print" onchange="preview(this, 'p3-sig-2')" accept="image/*" />
+                    <div style="border-top: 1px solid #000; padding-top: 5px" contenteditable="true">
+                        HOD
+                    </div>
+                </div>
+                <div class="sig-box" style="width: 180px">
+                    <img id="p3-sig-3" class="sig-preview"
+                        style="display: none; max-height: 50px; margin-bottom: 5px" />
+                    <input type="file" class="no-print" onchange="preview(this, 'p3-sig-3')" accept="image/*" />
+                    <div style="border-top: 1px solid #000; padding-top: 5px" contenteditable="true">
+                        Principal
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        function preview(input, id) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.getElementById(id);
+                    img.src = e.target.result;
+                    img.style.display = "block";
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,197 @@
+{% extends "base.html" %} {% block title %}Dashboard{% endblock %} {% block
+content %}
+<div class="dashboard-wrapper">
+  <div class="kpi-box">
+    <div class="box color-total" onclick="filterByCard('all')">
+      <p>Total Students</p>
+      <h4>{{ stats.total }}</h4>
+    </div>
+    <div class="box color-pass" onclick="filterByCard('pass')">
+      <p>Overall Pass</p>
+      <h4>{{ stats.pass }}</h4>
+    </div>
+    <div class="box color-atkt" onclick="filterByCard('atkt')">
+      <p>Overall ATKT</p>
+      <h4>{{ stats.atkt }}</h4>
+    </div>
+    <div class="box color-fail" onclick="filterByCard('fail')">
+      <p>Overall Fail</p>
+      <h4>{{ stats.fail }}</h4>
+    </div>
+  </div>
+
+  <div class="course-header-strip">
+    <div class="course-title">
+      <span class="badge">Course</span>
+      <strong>{{ course }}</strong>
+    </div>
+    <div class="course-meta">
+      <span>Class: <strong>{{ year }}</strong></span>
+      <span class="divider">|</span>
+      <span>Strength: <strong>{{ stats.total }}</strong></span>
+    </div>
+  </div>
+
+  <div class="controls-panel">
+    <div class="filter-group">
+      <input
+        type="text"
+        id="searchInput"
+        onkeyup="globalFilter()"
+        placeholder="Search Name, Seat No or PRN..."
+        class="search-box"
+      />
+      <select
+        id="statusFilter"
+        onchange="globalFilter()"
+        class="advanced-filter"
+      >
+        <option value="all">-- Select Advanced Filter --</option>
+
+        <optgroup label="Basic Result">
+          <option value="pass">Overall Pass Students</option>
+          <option value="atkt">Overall ATKT Students</option>
+          <option value="fail">Overall Fail Students</option>
+        </optgroup>
+
+        <optgroup label="Toppers">
+          <option value="top3_overall">🏆 Overall Top 3 Students</option>
+          <option value="top5_male">♂ Top 5 Male Students</option>
+          <option value="top5_female">♀ Top 5 Female Students</option>
+        </optgroup>
+
+        <optgroup label="Gender Wise Analysis">
+          <option value="male_pass">Male - Passed</option>
+          <option value="male_atkt">Male - ATKT</option>
+          <option value="male_fail">Male - Failed</option>
+          <option value="female_pass">Female - Passed</option>
+          <option value="female_atkt">Female - ATKT</option>
+          <option value="female_fail">Female - Failed</option>
+        </optgroup>
+
+        <optgroup label="Grade Classification (Pass Students)">
+          <option value="distinction">Grade: Distinction (7.75+ SGPA)</option>
+          <option value="first_class">Grade: First Class (6.75 - 7.74)</option>
+          <option value="higher_second">
+            Grade: Higher Second (6.25 - 6.74)
+          </option>
+          <option value="second_class">
+            Grade: Second Class (5.75 - 6.24)
+          </option>
+          <option value="pass_class">Grade: Pass Class (Below 5.75)</option>
+        </optgroup>
+      </select>
+    </div>
+    <div
+      class="button-group"
+      style="display: flex; gap: 10px; align-items: center"
+    >
+      <button onclick="resetAllFilters()" class="btn-reset">Clear</button>
+
+      <a
+        href="{{ url_for('generate_class_report') }}"
+        target="_blank"
+        class="btn-primary"
+        style="
+          background-color: #10b981;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 8px;
+          color: white;
+          cursor: pointer;
+          font-weight: 700;
+          text-decoration: none;
+          font-size: 13px;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+        "
+      >
+        <i class="fas fa-file-pdf"></i> 🖨️ Print Overall Report
+      </a>
+
+      {% if not is_already_saved %}
+      <form
+        action="{{ url_for('save_to_db') }}"
+        method="POST"
+        style="display: inline"
+      >
+        <button
+          type="submit"
+          class="btn-primary"
+          style="
+            background-color: var(--accent);
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: 700;
+          "
+        >
+          Save Data to Database
+        </button>
+      </form>
+      {% else %}
+      <span
+        class="badge"
+        style="
+          background-color: #3b82f6;
+          color: white;
+          padding: 10px 15px;
+          border-radius: 8px;
+          font-size: 12px;
+          font-weight: 700;
+          flex-wrap: nowrap;
+        "
+      >
+        Records Saved
+      </span>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table id="studentTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable(0)">Seat No ⇅</th>
+          <th onclick="sortTable(1)">Student Name ⇅</th>
+          <th>PRN</th>
+          <th>Gender</th>
+          <th onclick="sortTable(4)">Result ⇅</th>
+          <th onclick="sortTable(5)">SGPA ⇅</th>
+          <th style="text-align: center">Action</th>
+        </tr>
+      </thead>
+      <tbody id="studentTableBody">
+        {% for std in student_data %}
+        <tr
+          data-gender="{{ std.gender }}"
+          data-status="{{ 'pass' if 'PASS' in std.result.upper() else ('atkt' if 'A.T.K.T' in std.result.upper() else 'fail') }}"
+          data-sgpa="{{ std.dashboard_sgpa or '0' }}"
+        >
+          <td>{{ std.seat_no }}</td>
+          <td style="font-weight: 600">{{ std.full_name }}</td>
+          <td>{{ std.prn }}</td>
+          <td>{{ std.gender }}</td>
+          <td>
+            <span
+              class="status-badge status-{{ 'pass' if 'PASS' in std.result.upper() else ('atkt' if 'A.T.K.T' in std.result.upper() else 'fail') }}"
+            >
+              {{ std.result }}
+            </span>
+          </td>
+          <td><strong>{{ std.dashboard_sgpa or '-' }}</strong></td>
+          <td style="text-align: center">
+            <a href="/report/{{ std.seat_no }}" class="btn-view" target="_blank"
+              >View Report</a
+            >
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

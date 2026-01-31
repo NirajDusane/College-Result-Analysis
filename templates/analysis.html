@@ -1,0 +1,132 @@
+{% extends "base.html" %} {% block title %}Student Analysis - Excel Upload{%
+endblock %} {% block content %}
+<div class="index-container">
+  <!-- Header Section: Displays the page title and operational mode -->
+  <div class="system-hero">
+    <h1>Excel Based Student Analysis</h1>
+    <div class="academic-year-badge">Advanced Filtering Mode</div>
+    <p>
+      Analyze specific student groups by matching your custom Excel data with
+      our database records.
+    </p>
+  </div>
+
+  <!-- Main Content Wrapper: Centers the analysis card on the screen -->
+  <div class="forms-wrapper" style="justify-content: center">
+    <!-- Filter Card: Contains instructions and the file upload form -->
+    <div class="glass-form-card" style="max-width: 650px; padding: 40px; border: 1px solid var(--accent)">
+      <h2>📊 Student Filter Analysis</h2>
+
+      <!-- Instructions Block: Provides formatting guidelines for the Excel file -->
+      <div class="alert-box" style="
+          background: rgba(88, 84, 135, 0.1);
+          color: var(--text-primary);
+          border-color: var(--accent);
+          text-align: left;
+          margin: 20px 0;
+        ">
+        <strong>📌 Important Note for Excel Format:</strong>
+        <ul style="margin-top: 10px; font-size: 13px; line-height: 1.6">
+          <li>
+            Ensure your file contains a <b>'Seat No'</b> column to match
+            results.
+          </li>
+          <li>
+            For 1st & 2nd Year analysis, including a <b>'Gender'</b> column is
+            highly recommended for accurate statistics.
+          </li>
+        </ul>
+      </div>
+
+      <!-- Excel Upload Form: Submits file to the filter_excel route -->
+      <form action="{{ url_for('filter_excel') }}" method="post" enctype="multipart/form-data">
+        <!-- File Input Block -->
+        <div class="form-group" style="margin-bottom: 30px">
+          <label style="margin-bottom: 15px; display: block">Select Excel File (.xlsx, .xls):</label>
+          <input type="file" name="student_excel" accept=".xlsx, .xls" required
+            style="padding: 15px; background: var(--bg-main)" />
+        </div>
+
+        <!-- Action Buttons: Submission and navigation -->
+        <div class="button-group" style="display: flex; flex-direction: column; gap: 20px">
+          <!-- Submit Button: Triggers the backend filtering logic -->
+          <button type="submit" class="btn-primary" style="width: 100%; padding: 15px; font-size: 16px">
+            Apply Filter & View Result
+          </button>
+
+          <!-- Navigation Link: Returns the user to the main dashboard -->
+          <a href="{{ url_for('dashboard') }}" class="btn-reset" style="
+              text-decoration: none;
+              text-align: center;
+              display: block;
+              padding: 12px;
+              background: transparent;
+              border: 1px solid var(--border);
+            ">
+            ← Back to Dashboard
+          </a>
+        </div>
+      </form>
+    </div>
+    <div class="glass-form-card" style="max-width: 650px; padding: 40px; border: 1px solid var(--accent)">
+      <h2>📚 Subject Manager (Member Upload)</h2>
+      <p style="font-size: 13px; color: #94a3b8; margin-bottom: 20px">
+        Download pre-filled template, add subjects, and upload.
+      </p>
+
+      <form action="{{ url_for('download_subject_template') }}" method="post" style="
+          border-bottom: 1px solid #334155;
+          padding-bottom: 20px;
+          margin-bottom: 20px;
+        ">
+        <label>Select Department & Class:</label>
+        <select name="department" class="form-control" required style="
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            background: #1e293b;
+            color: white;
+          ">
+          <option value="B.Sc. (Computer Science)">
+            B.Sc. (Computer Science)
+          </option>
+          <option value="B.Com">B.Com</option>
+          <option value="Bsc">Plain Bsc</option>
+          <option value="B.A.">B.A.</option>
+          <option value="BBA (C.A.)">BBA (C.A.)</option>
+          <option value="BBA">BBA</option>
+          <option value="M.Sc. (Computer Science)">
+            M.Sc. (Computer Science)
+          </option>
+        </select>
+        <select name="year" class="form-control" required
+          style="width: 100%; padding: 10px; background: #1e293b; color: white">
+          <option value="fy">First Year (F.Y.)</option>
+          <option value="sy">Second Year (S.Y.)</option>
+          <option value="ty">Third Year (T.Y.)</option>
+          <option value="4y">Fourth Year (4Y)</option>
+        </select>
+        <button type="submit" class="btn-reset" onclick="handleDownload()" style="width: 100%;margin-top: 10px;border: 1px dashed var(--accent);">
+          ⬇️ Download Pre-filled Excel Template
+        </button>
+
+      </form>
+
+      <form action="{{ url_for('upload_subjects') }}" method="post" enctype="multipart/form-data">
+        <label>Upload Filled Subject File:</label>
+        <input type="file" name="subject_excel" accept=".xlsx" required style="width: 100%; margin: 10px 0" />
+        <button type="submit" class="btn-primary" style="width: 100%; background: #28a745">
+          🚀 Upload Subjects
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  function handleDownload() {
+    setTimeout(() => {
+      window.location.href = "{{ url_for('student_analysis') }}";
+    }, 2000); // 2 sec delay (safe)
+  }
+</script>
+{% endblock %}

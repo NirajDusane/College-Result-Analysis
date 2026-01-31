@@ -1,0 +1,238 @@
+/**
+ * 1. GENERAL GLOBAL STYLES
+ * Sets basic typography, layout, and color defaults for the report page.
+ */
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: white;
+  margin: 0;
+  padding: 40px;
+  color: #333;
+}
+
+/**
+ * REPORT CONTAINER
+ * Limits the width and provides padding for the document layout.
+ */
+.report-container {
+  max-width: 1000px;
+  margin: auto;
+  border: 1px solid #eee;
+  padding: 30px;
+  background-color: white;
+}
+
+/**
+ * 2. HEADER AND TITLES
+ * Styles for institutional identification and subject-specific headings.
+ */
+.college-header {
+  text-align: center;
+  border-bottom: 3px double #333;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.college-header h1 {
+  font-size: 24px;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.college-header h2 {
+  font-size: 18px;
+  color: #555;
+  margin: 5px 0;
+}
+
+/**
+ * SUBJECT INFORMATION BLOCK
+ * Displays meta-information about the report in a flexbox layout.
+ */
+.subject-info {
+  display: flex;
+  justify-content: space-between;
+  background: #f9f9f9;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+h3 {
+  border-left: 5px solid #4e73df;
+  padding-left: 10px;
+  font-size: 16px;
+  margin-top: 25px;
+  color: #2e59d9;
+}
+
+/**
+ * 3. DATA TABLES AND CARDS
+ * Structural styles for tabular data representation and summary sections.
+ */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.data-table th,
+.data-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.data-table th {
+  background-color: #f2f4f8;
+  font-weight: 700;
+}
+
+.subject-table th {
+  background-color: #eef2ff;
+  color: #3730a3;
+}
+
+.summary-card {
+  border: 2px solid #333;
+  margin-top: 20px;
+  padding: 15px;
+}
+
+/**
+ * 4. GRADE AND ANALYSIS BOXES
+ * Grid layout for performance analysis and grade distribution display.
+ */
+.grade-box {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.grade-item {
+  background: #f8f9fc;
+  border: 1px solid #e3e6f0;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.grade-item b {
+  color: #4e73df;
+  font-size: 16px;
+}
+
+/**
+ * 5. CONTROL BUTTONS AND EDIT MODE
+ * UI elements for report management and inline editing interactions.
+ */
+.edit-controls {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #4e73df;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+[contenteditable="true"]:focus {
+  outline: 2px solid #4e73df;
+  background: #f8f9fc;
+}
+
+/**
+ * 6. SIGNATURE SECTION
+ * Layout and styling for official digital or hand-signed authentication areas.
+ */
+.sig-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 40px;
+  text-align: center;
+}
+
+.sig-box {
+  width: 200px;
+  padding-top: 5px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.sig-img-area {
+  height: 60px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.sig-preview {
+  max-height: 60px;
+  max-width: 160px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 5px auto;
+}
+
+.sig-upload {
+  margin-top: 5px;
+  font-size: 10px;
+}
+
+.page-break {
+  page-break-after: always;
+}
+
+/**
+ * 7. PRINT STYLES
+ * Optimized configuration for physical document printing and PDF generation.
+ */
+@media print {
+  body {
+    padding: 0 !important;
+    margin: 0 !important;
+    background-color: white !important;
+  }
+
+  .report-container {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Hides interactive UI elements during printing */
+  .no-print,
+  .edit-controls,
+  .sig-upload,
+  button {
+    display: none !important;
+  }
+
+  /* Ensures borders are visible and distinct in printed documents */
+  .data-table th,
+  .data-table td {
+    border: 1px solid black !important;
+  }
+
+  [contenteditable="true"] {
+    border: none !important;
+    outline: none !important;
+    background: none !important;
+  }
+
+  h3 {
+    margin-top: 20px;
+  }
+
+  @page {
+    margin: 1cm;
+  }
+}
